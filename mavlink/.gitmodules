@@ -1,0 +1,6 @@
+[submodule "message_definitions/v1.0"]
+	path = message_definitions/v1.0
+	url = git@192.168.0.233:vehicle_software/message_definitions.git
+[submodule "pymavlink"]
+	path = pymavlink
+	url = git@192.168.0.233:vehicle_software/pymavlink.git

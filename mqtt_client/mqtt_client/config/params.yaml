@@ -1,0 +1,32 @@
+broker:
+  host: 192.168.144.123
+  port: 1883
+client:
+  keep_alive_interval: 3
+  min_retry_interval: 1
+  max_retry_interval: 5
+
+connect_lost_pub_interval: 10
+
+bridge:
+  ros2mqtt:
+    - ros_topic: /uat_cloud_ros/telemetry
+      mqtt_topic: thing/device/uid_sn/telemetry
+      primitive: true
+    - ros_topic: /uat_cloud_ros/command_ack
+      mqtt_topic: thing/device/uid_sn/command_ack
+      primitive: true
+    - ros_topic: /uat_cloud_ros/status
+      mqtt_topic: sys/device/uid_sn/status
+      primitive: true
+  mqtt2ros:
+    - mqtt_topic: thing/device/uid_sn/telemetry_reply
+      ros_topic: /uat_cloud_ros/telemetry_reply
+      primitive: true
+    - mqtt_topic: thing/device/uid_sn/command
+      ros_topic: /uat_cloud_ros/command
+      primitive: true
+    - mqtt_topic: sys/device/uid_sn/status_reply
+      ros_topic: /uat_cloud_ros/status_reply
+      primitive: true
+

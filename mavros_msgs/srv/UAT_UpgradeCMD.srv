@@ -1,0 +1,95 @@
+uint8 UPGRADE_RESPONSE_OK = 165   #0xA5
+uint8 UPGRADE_RESPONSE_ERR = 90     #0x5A
+
+uint8 CMD_TYPE_UPGRADE_REQUEST = 1
+# rep
+# param1 = 1 :Satisfy upgrade requirements
+
+uint8 CMD_TYPE_STATUS_QUERY = 2
+# rep
+# param1 = 1 :ready for upgrade
+
+uint8 CMD_TYPE_UPGRADE_START = 3
+# no response
+# 
+
+uint8 CMD_TYPE_PROGRESS_QUERY = 4
+uint8 PROGRESS_STEP_IDLE = 0
+uint8 PROGRESS_STEP_ERASE = 1
+uint8 PROGRESS_STEP_UPLOAD = 2
+uint8 PROGRESS_STEP_VERIFY = 3
+uint8 PROGRESS_STEP_FINISH = 4
+# rep
+# param1 : step 1=erase 2=upload 3=verify 
+# param4 : erase progress
+# param5 : upload Progress
+# param6 : verify Progress
+
+uint8 STATE_TYPE_IDLE = 0
+uint8 STATE_TYPE_WAIT_STATUS_QUERY = 1
+uint8 STATE_TYPE_WAIT_UPGRADE_READY = 2
+uint8 STATE_TYPE_WAIT_UPGRADE_START = 3
+uint8 STATE_TYPE_WAIT_PROGRESS_QUERY = 4
+uint8 STATE_TYPE_UPGRADE_FINISH = 5
+uint8 STATE_TYPE_UPGRADE_PARAM = 6
+# 0x11
+uint8 CMD_UAVCAN_EXTRACT_START = 17
+# rep
+# param1:checksum result
+
+# 0x12
+uint8 CMD_UAVCAN_EXTRACT_RPOGRESS_QUERY = 18
+# rep
+# param1:
+# param2: extract Progress
+
+# 0x13
+uint8 CMD_UAVCAN_TRANSFER_START = 19 
+# req 
+# param1:target node id
+# rep
+# param1:node id
+# param2: negative if wrong situation
+
+# 0x14
+uint8 CMD_UAVCAN_TRANSFER_RPOGRESS_QUERY = 20
+# req
+# param1:target node id
+# rep
+# param1:node id
+# param2: upload Progress
+
+# 0x15
+uint8 CMD_UAVCAN_UPGRADE_START = 21
+# req
+# param1:target node id
+# rep
+# param1:node id
+# param2: negative if wrong situation
+
+# 0x16
+uint8 CMD_UAVCAN_UPGRADE_RPOGRESS_QUERY = 22
+# req
+# param1:target node id
+# rep
+# param1:node id
+# param2: upload Progress  negative if wrong situation
+
+
+uint8 type 
+int32 param1
+int32 param2
+int32 param3
+float32 param4
+float32 param5
+float32 param6
+float32 param7
+---
+uint8 res_type
+int32 param1
+int32 param2
+int32 param3
+float32 param4
+float32 param5
+float32 param6
+float32 param7

@@ -1,0 +1,13 @@
+uint8 GCS_CTRL = 1
+uint8 CLOUD_SERVER = 2
+uint8 source
+
+string url
+string clientid
+string username
+string password
+string key 
+string host_ip
+int32 host_port
+---
+bool ok

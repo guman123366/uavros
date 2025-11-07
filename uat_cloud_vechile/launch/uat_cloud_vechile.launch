@@ -1,0 +1,13 @@
+<launch>  
+
+  <!-- 定义油量标定文件 -->
+  <arg name="respawn_mavros" />
+  <arg name="user_name" />
+  <arg name="oil_standard_file" default="/home/$(arg user_name)/App/config/OilStandard.yaml" />
+
+  <!-- 加载配置文件 -->
+  <rosparam file="$(arg oil_standard_file)" command="load" />
+
+  <node name="uat_cloud_vechile_node" pkg="uat_cloud_vechile" type="uat_cloud_vechile_node" respawn="$(arg respawn_mavros)" output="screen" />
+  <param name="user_name" value="$(arg user_name)"/>
+</launch>

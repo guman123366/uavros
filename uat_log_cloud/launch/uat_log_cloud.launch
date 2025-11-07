@@ -1,0 +1,8 @@
+<launch>  
+
+  <arg name="respawn_mavros" />
+  <arg name="user_name" />
+
+  <node name="uat_log_cloud_node" pkg="uat_log_cloud" type="uat_log_cloud_node" respawn="true" output="screen" />
+  <param name="user_name" value="$(arg user_name)"/>
+</launch>

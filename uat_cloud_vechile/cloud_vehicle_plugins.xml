@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<library path="lib/libuat_cloud_vechile">
+  <class type="uat::plugin::OsdPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Osd Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::MainInsPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>MainIns Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::Engine550Plugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Engine550 Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::ControlLawPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>ControlLaw Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::DiscretePlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Discrete Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::DrivetrainPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Drivetrain Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::FMSPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>FMS Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::GuidanceLawPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>GuidanceLaw Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::PowerPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Power Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::RemoteControlPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>RemoteControl Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::CommandPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Command Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::OsdReplyPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>OsdReply Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::StatusPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>Status Plugin.</description>
+  </class>
+
+  <class type="uat::plugin::WPLoadPlugin" base_class_type="uat::plugin::cloud_vehicle_bridge::PluginBase">
+    <description>WPLoad Plugin.</description>
+  </class>
+</library>

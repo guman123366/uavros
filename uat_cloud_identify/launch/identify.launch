@@ -1,0 +1,15 @@
+<launch>
+
+    <!--<env name="ROSCONSOLE_CONFIG_FILE"
+         value="$(eval optenv('ROSCONSOLE_CONFIG_FILE', find('identify') + '/launch/custom_rosconsole.conf'))"/> -->
+
+    <arg name="respawn_mavros" default="true" />   
+    <node pkg="identify" type="identify_node" name="identify_node" respawn="$(arg respawn_mavros)" output="screen"/>
+</launch>
+
+
+
+
+
+
+

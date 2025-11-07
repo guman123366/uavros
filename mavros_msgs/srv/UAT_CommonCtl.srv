@@ -1,0 +1,77 @@
+uint8 CMD_TYPE_DATALINK_PAIR_CTL = 2
+
+#   <entry value="3" name="VISION_DEEP_CTL">
+#     <description>control vision deep distance</description>
+#     <param index="1" label="on/off">Empty</param>
+uint8 CMD_TYPE_VISION_DEEP_CTL = 3
+uint8 CMD_TYPE_VISION_OP_CTL = 4
+
+#   <entry value="5" name="VISION_NAVIGATION_CTL">
+#     <description>control april tag flow </description>SHIJ
+#     <param index="1" label="on/off">Empty</param>
+#     <param index="2" label="type"> apriltag type default 1 </param>
+#     <param index="3" label="nav_env">navigation environment 1:outdoot 2:indoor</param>
+uint8 CMD_TYPE_VISION_NAVIGATION_CTL = 5
+
+#   <entry value="6" name="FILL_LIGHT_CTL">
+#     <description>control fill light </description>
+#     <param index="1" label="on/off">Empty</param>
+#     <param index="2" label="level" minValue="0" maxValue="10">scale with hardware</param>
+uint8 CMD_TYPE_FILL_LIGHT_CTL = 6
+
+#   <entry value="7" name="GET_PERIPHERAL_VERSION">
+#     <description>get peripheral version </description>
+#     <param index="1" label="device_type">type</param>
+#     <param index="2" label="device_id">Empty</param>
+#     <param index="3" label="firmware_version">Empty</param>
+uint8 CMD_TYPE_GET_PERIPHERAL_VERSION = 7
+uint8 DEVID_OFFBOARD_MAVROS = 5
+uint8 DEVID_OFFBOARD_APP = 2
+uint8 DEVID_OFFBOARD_MIRRORING = 3
+
+#   <entry value="16" name="ALT_CMD_CTL">
+#     <description>command of ALT Co.Ltd </description>
+#     <param index="1" label="sub_cmd"> 1:force idle</param>
+uint8 CMD_TYPE_ALT_CMD_CTL = 16
+
+#   <entry value="25" name="NETLINK_CTL">
+#     <description>netlink control example 4G/5G </description>
+#     <param index="1" label="enable">0:disable 1:enable 2:request status</param>
+#     <param index="2" label="stream_type">0:disable 1:only fpv 2:only main video 3:main with fpv 3:fpv with main </param>
+#     <param index="3" label="mount_devid">mount device id</param>
+uint8 CMD_TYPE_NETLINK_CTL = 25
+
+uint8 TRANSMIT_GCS_UID = 26
+
+#   <entry value="30" name="BOTTOMCALIB_CTL">
+#     <description>control bottom vision calibrate </description>
+#     <param index="1" label="config">1:write 2:read</param>
+uint8 CMD_TYPE_BOTTOMCALIB_CTL = 30
+
+#   <entry value="34" name="LOGISTICS_SERVO_CTL">
+#     <description>control logistics servo</description>
+#     <param index="1" label="servo1">0:open 1:close</param>
+#     <param index="2" label="servo2">0:open 1:close</param>
+#     <param index="3" label="config">1:set 2:get</param>
+uint8 CMD_TYPE_LOGISTICS_SERVO_CTL = 34
+
+
+uint8 cmd 
+int32 param1
+int32 param2
+int32 param3
+float32 param4
+float32 param5
+float32 param6
+float32 param7
+
+---
+bool ok
+uint8 res_cmd
+int32 param1
+int32 param2
+int32 param3
+float32 param4
+float32 param5
+float32 param6
+float32 param7

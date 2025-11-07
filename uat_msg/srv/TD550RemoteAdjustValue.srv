@@ -1,0 +1,6 @@
+# Common type for switch commands
+
+float32 adjust_value
+---
+bool success
+uint8 result

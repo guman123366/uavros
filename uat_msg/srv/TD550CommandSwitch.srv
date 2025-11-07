@@ -1,0 +1,6 @@
+# Common type for switch commands
+
+uint8 value
+---
+bool success
+uint8 result

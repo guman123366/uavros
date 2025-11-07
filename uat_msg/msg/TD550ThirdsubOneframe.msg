@@ -1,0 +1,13 @@
+uint8 DisperseIn1 #外部离散量输入字1
+uint16 DisperseOut2 #离散输出指令2
+uint16 DisperseOutRe2 #离散输出回绕字2
+uint8 Battery #蓄电池状态
+float32 MemsTemp #主mems温度
+float32 OpenK2 #上限位开关K2电压值
+float32 OilPressure #燃油压力电压值
+float32 OilVolume #燃油油量电压值
+float32 OpenK4 #右到位开关K4电压值
+float32 RetarderPressure #减速器滑油压力电压值
+float32 RetarderTemp #减速器滑油温度电阻值
+float32 OpenK1 #下限位开关K1电压值
+float32 Tension #张紧状态指示电压值

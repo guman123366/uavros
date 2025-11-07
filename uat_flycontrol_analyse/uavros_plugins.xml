@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<library path="lib/libuavros_plugins">
+  <class name="waypoint" type="uavros::std_plugins::WaypointPlugin" base_class_type="uavros::plugin::PluginBase">
+    <description>Access to FCU mission waypoints.</description>
+  </class>
+</library>

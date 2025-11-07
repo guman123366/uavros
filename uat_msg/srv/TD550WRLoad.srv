@@ -1,0 +1,8 @@
+# Common type for switch commands
+
+uint8 wr_num
+uint8 wp_length
+uat_msg/TD550WayPoint[] points
+---
+bool success
+uint8 result

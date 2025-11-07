@@ -1,0 +1,14 @@
+float32 SubCounts #小帧计数器
+uint16 FCVersion #飞控版本号
+float32 CalibAirSpeed #校准空速
+float32 TureAirSpeed #真空速
+float32 AirPressHeight #气压高
+float32 StaticTemp #大气静温
+float32 TotalTemp #大气总温
+float32 SmoothAirSpeed #校准空速（平滑处理）
+float32 AvoidNorthPos1 #障碍物---1北向相对位置x
+float32 AvoidEastPos1 #障碍物---1北向相对位置y
+float32 AvoidNorthPos2 #障碍物---2北向相对位置x
+float32 AvoidEastPos2 #障碍物---2北向相对位置y
+float32 AvoidNorthPos3 #障碍物---3北向相对位置x
+uint8 NaviState #惯导状态字

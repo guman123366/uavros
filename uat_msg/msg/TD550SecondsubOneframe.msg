@@ -1,0 +1,17 @@
+uint8 InertialState #闭环光纤惯导状态字
+float32 BDPdop #卫星PDOP值
+uint8 MEMSNum #导航卫星颗数（MEMS）
+float32 UTCTime #UTC时间
+uint8 FlightState #飞行阶段状态字
+uint8 RouteNum #当前航线编号
+uint8 WayPointNum #当前航点编号
+uint8 WayPointState #当前航点特征字
+uint8 NextPointNum #下一个航点编号
+uint8 NextPointState #下一个航点特征字
+float32 HeadingControl #航向导引信号
+float32 TrackError #航迹误差角
+uint8 SetoverDis #侧偏距信号
+uint8 MainNavNum #主惯导卫星颗数
+uint8 FlushingDis #待飞距信号
+uint8 FlushingTime #待飞时间
+uint8 MemsWarningState #MEMS主惯导状态字

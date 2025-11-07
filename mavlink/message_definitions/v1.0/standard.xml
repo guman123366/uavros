@@ -1,0 +1,2020 @@
+<?xml version="1.0"?>
+<mavlink>
+  <!-- MAVLink standard messages -->
+  <include>common.xml</include>
+  <dialect>0</dialect>
+  <enums>
+    <enum name="MAV_TYPE">
+      <description>uat frame type </description>
+      <entry value="200" name="UAT_Q12">
+        <description>Q12</description>
+      </entry>
+      <entry value="201" name="UAT_Q20">
+        <description>Q20</description>
+      </entry>
+      <entry value="202" name="UAT_Q100">
+        <description>Q100</description>
+      </entry>
+    </enum>
+
+    <enum name="UAT_ACTIVE_STEP">
+      <description>mount command type and description</description>
+      <entry value="1" name="REQ_GET_FIX">
+        <description> from gcs to vehilce : get vid component id </description>
+      </entry>
+      <entry value="2" name="REP_GET_FIX">
+        <description> form vehicle to gcs : send vid component id </description>
+      </entry>
+      <entry value="3" name="REQ_SET_INFO">
+        <description> from gcs to vehilce : set active info: idCard.phoneNumber.activationDate vehicleName</description>
+      </entry>
+      <entry value="4" name="REP_SET_INFO">
+        <description> form vehicle to gcs : success or not</description>
+      </entry>
+      <entry value="5" name="REQ_CLEAR_STATE">
+        <description> from gcs to vehilce : clear avtive info </description>
+      </entry>
+      <entry value="6" name="REP_CLEAR_STATE">
+        <description> form vehicle to gcs : success or not</description>
+      </entry>      
+    </enum>
+
+    <enum name="UAT_MOUNT_MODE">
+      <description>mount command type and description</description>
+      <entry value="1" name="MODE_FIX_YAW">
+        <description> fix gimbal absolute yaw</description>
+      </entry>
+      <entry value="2" name="MODE_FOLLOW_YAW">
+        <description>gimbal yaw follow with vehicle</description>
+      </entry>
+    </enum>
+
+    <enum name="CTL_POINT_MODE">
+      <description>mount command type and description</description>
+      <entry value="1" name="CTL_POINT_MODE_MOVE">
+        <description>empty</description>
+      </entry>
+      <entry value="2" name="CTL_POINT_MODE_FOCUS">
+        <description>empty</description>
+      </entry>
+      <entry value="3" name="CTL_POINT_MODE_TRACKING">
+        <description>empty</description>
+      </entry>
+      <entry value="4" name="CTL_POINT_MODE_GET_TEMPERATURE">
+        <description>empty</description>
+        <param index="1" label="temperature">return from UAT_MOUNT_CONTROL_ACK</param>
+      </entry>
+    </enum>
+
+    <enum name="AITRACK_STATE">
+      <description>mount command type and description</description>
+      <entry value="0" name="AITRACK_STATE_IDLE">
+        <description>empty</description>
+      </entry>
+      <entry value="1" name="AITRACK_STATE_SEARCH">
+        <description>empty</description>
+      </entry>
+      <entry value="2" name="AITRACK_STATE_TRACKING">
+        <description>empty</description>
+      </entry>
+      <entry value="3" name="AITRACK_STATE_LOST">
+        <description>empty</description>
+      </entry>
+    </enum>
+
+    <enum name="AITRACK_SOURCE">
+      <description>mount command type and description</description>
+      <entry value="0" name="AITRACK_SOURCE_IDLE">
+        <description>empty</description>
+      </entry>
+      <entry value="1" name="AITRACK_SOURCE_VISIBLE">
+        <description>empty</description>
+      </entry>
+      <entry value="2" name="AITRACK_SOURCE_IR">
+        <description>empty</description>
+      </entry>
+    </enum>
+    
+    <enum name="VISIBLE_TYPE">
+      <description>visible_type</description>
+      <entry value="0" name="VISIBLE_COMMON">
+        <description>common mode</description>
+      </entry>
+      <entry value="1" name="VISIBLE_DEFOG">
+        <description>light fog mode</description>
+      </entry>
+      <entry value="2" name="VISIBLE_IRCUT">
+        <description>ir-cut mode</description>
+      </entry>
+    </enum> 
+    
+    <enum name="STREAM_TYPE">
+      <description>mount command type and description</description>
+      <entry value="0" name="STREAM_TYPE_VISIBLE_ONLY">
+        <description>empty</description>
+      </entry>
+      <entry value="1" name="STREAM_TYPE_IR_ONLY">
+        <description>empty</description>
+      </entry>
+      <entry value="2" name="STREAM_TYPE_IR_IN_VISIBLE">
+        <description>empty</description>
+      </entry>
+      <entry value="3" name="STREAM_TYPE_VISIBLE_IN_IR">
+        <description>empty</description>
+      </entry>
+      <entry value="4" name="STREAM_TYPE_VISIBLE_WITH_IR">
+        <description>empty</description>
+      </entry>
+      <entry value="5" name="STREAM_TYPE_NIGHT_ONLY">
+        <description>empty</description>
+      </entry>
+    </enum>
+
+    <enum name="PARACHUTE_STATE" bitmask="true">
+      <description>Bitmask of parachute state </description>
+      <entry value="0" name="ACTIVE">
+        <description>empty</description>
+      </entry>
+      <entry value="1" name="RELEASE">
+        <description>empty</description>
+      </entry>
+      <entry value="2" name="AUTO_MODE">
+        <description>empty</description>
+      </entry>
+      <entry value="3" name="DATALINK_CHECK">
+        <description>empty</description>
+      </entry>
+      <entry value="4" name="LOG_CHECK">
+        <description>empty</description>
+      </entry>
+    </enum>
+
+    <enum name="IR_PALETTES">
+      <description>Colour Palettes of ir camera</description>
+      <entry value="0" name="IR_IRON">
+        <description>empty</description>
+      </entry>
+      <entry value="1" name="IR_BLACK">
+        <description>empty</description>
+      </entry>
+      <entry value="2" name="IR_WRITE">
+        <description>empty</description>
+      </entry>
+      <entry value="3" name="IR_GREY">
+        <description>empty</description>
+      </entry>
+      <entry value="4" name="IR_RAINBOW">
+        <description>empty</description>
+      </entry>
+      <entry value="5" name="IR_SEPIA">
+        <description>empty</description>
+      </entry>
+      <entry value="6" name="IR_NIGHT">
+        <description>empty</description>
+      </entry>
+      <entry value="7" name="IR_AURORA">
+        <description>empty</description>
+      </entry>
+      <entry value="8" name="IR_REDHOT">
+        <description>empty</description>
+      </entry>
+      <entry value="9" name="IR_JUNGLE">
+        <description>empty</description>
+      </entry>
+      <entry value="10" name="IR_MEDICAL">
+        <description>empty</description>
+      </entry>
+      <entry value="11" name="IR_GLORY">
+        <description>empty</description>
+      </entry>
+    </enum> 
+
+    <enum name="UAT_BATTERY_STATE" bitmask="true">
+      <description>Bitmask of battery state  </description>
+      <entry value="0" name="STATUS_FLAG_OK">
+        <description>normal status </description>
+      </entry>
+      <entry value="1" name="STATE_PRE_ACTIVE">
+        <description>mos active</description>
+      </entry>
+      <entry value="2" name="STATE_PRE_EVER">
+        <description>mos inactive</description>
+      </entry>
+      <entry value="3" name="STATE_POWER_ACTIVE">
+        <description>previous active</description>
+      </entry>
+      <entry value="4" name="STATE_POWER_INACTIVE">
+        <description>keep pre active</description>
+      </entry>
+      <entry value="5" name="STATUS_FLAG_CHARGING">
+        <description>STATUS_FLAG_CHARGING</description>
+      </entry>
+      <entry value="6" name="STATUS_FLAG_CHARGED">
+        <description>flag chared in charging mode</description>
+      </entry>
+      <entry value="7" name="STATUS_FLAG_TEMP_HOT">
+        <description>too hot</description>
+      </entry>
+      <entry value="8" name="STATUS_FLAG_TEMP_COLD">
+        <description>too cold</description>
+      </entry>
+      <entry value="9" name="STATUS_FLAG_OVERLOAD">
+        <description>safe area violation </description>
+      </entry>
+    </enum> 
+    
+    <enum name="UAT_SYS_STATE" bitmask="true">
+      <description>Bitmask of system status </description>
+      <entry value="0" name="GNSS_STATUS_RTK_SWITCH">
+        <description>true if happend rtk switch to gps </description>
+      </entry>
+      <entry value="1" name="GNSS_STATUS_RTK_RECOVER">
+        <description>true if rtk fixed is recovered</description>
+      </entry>
+      <entry value="2" name="MAG_STATUS_NEED_CAL">
+        <description>true if mag need calibrate </description>
+      </entry>
+    </enum> 
+
+    <enum name="UAT_AGRO_OPERATION" bitmask="true">
+      <description>Bitmask of system status </description>
+      <entry value="0" name="FIX_YAW">
+        <description>true if need fix yaw during agro task </description>
+      </entry>
+      <entry value="1" name="TERRAIN_ENABLE">
+        <description>true if need terrain ground </description>
+      </entry>
+      <entry value="2" name="SINGLE_SPRAY_LEFT">
+        <description> </description>
+      </entry>
+      <entry value="3" name="SINGLE_SPRAY_RIGHT">
+        <description>enable </description>
+      </entry>
+    </enum> 
+
+    <enum name="UAT_AGRO_STATE" bitmask="true">
+      <description>Bitmask of agro status </description>
+      <entry value="0" name="AGRO_ARM">
+        <description>true if spray or spread armed </description>
+      </entry>
+      <entry value="1" name="YAW_FIX">
+        <description>true if yaw fixed </description>
+      </entry>
+    </enum> 
+
+    <enum name="UAT_AGRO_TYPE">
+      <description>agro system type and description</description>
+      <entry value="0" name="UAT_AGRO_TYPE_UNKNOW">
+        <description> unknow system</description>
+      </entry>
+      <entry value="1" name="UAT_AGRO_TYPE_SPRAY">
+        <description> spray system</description>
+      </entry>
+      <entry value="2" name="UAT_AGRO_TYPE_SPREAD">
+        <description>spread system</description>
+      </entry>
+    </enum>
+
+     <enum name="UAT_MISSION_RESUME_POINT_TYPE">
+      <description>mission resume point type </description>
+      <entry value="0" name="MISSION_RESUME_POINT_NONE">
+        <description> </description>
+      </entry>
+      <entry value="1" name="MISSION_RESUME_POINT_FOOT1">
+        <description> </description>
+      </entry>
+      <entry value="2" name="MISSION_RESUME_POINT_FOOT2">
+        <description> </description>
+      </entry>
+      <entry value="3" name="MISSION_RESUME_POINT_BREAK">
+        <description> </description>
+      </entry>
+    </enum> 
+
+    <enum name="UAT_RTL_POINT_TYPE">
+      <description>rtl point type </description>
+      <entry value="0" name="RTL_POINT_NONE">
+        <description> </description>
+      </entry>
+      <entry value="1" name="RTL_POINT_TRANSFER">
+        <description> </description>
+      </entry>
+    </enum> 
+
+    <enum name="RADAR_MODE_BITMASK">
+      <description> bitmask of terrain radar work mode</description>
+      <entry value="1" name="MODE_LANDED_GROUND">
+        <description> </description>
+      </entry>
+      <entry value="2" name="MODE_VISUAL_PRO">
+        <description> </description>
+      </entry>
+      <entry value="10" name="MODE_SMOOTH_GROUND">
+        <description> </description>
+      </entry>
+      <entry value="11" name="MODE_MOUNTAIN_TREE">
+        <description> </description>
+      </entry>
+      <entry value="12" name="MODE_WATER">
+        <description> </description>
+      </entry>
+    </enum>
+
+    <enum name="UAT_MOUNT_CMD">
+      <description>mount command type and description</description>
+      <!-- <entry value="16" name="SET_MOUNT_MODE">
+        <description>set mount mode</description>
+        <param index="1" label="param1">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+      </entry> -->
+
+      <entry value="1" name="SET_MOUNT_MODE">
+        <description>set mount mode</description>
+        <param index="1" label="mount mode" enum="UAT_MOUNT_MODE">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="2" name="CTL_MOUNT_ATTITUDE">
+        <description>mount attitude control</description>
+        <param index="1" label="pitch">degrees * 10^2 </param>
+        <param index="2" label="yaw">degrees * 10^2</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="3" name="CTL_MOUNT_RATE">
+        <description>mount angle speed control </description>
+        <param index="1" label="pitch" minValue="-100" maxValue="100">scale with control input</param>
+        <param index="2" label="yaw" minValue="-100" maxValue="100">scale with control input</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="4" name="CAPTURE_CONTROL">
+        <description>set mount mode</description>
+        <param index="1" label="source">trigger from which source :mission or manual </param>
+        <param index="2" label="latitude">latitude in degrees * 10^7</param>
+        <param index="3" label="longitude">longitude in degrees * 10^7</param>
+        <param index="4" label="alt_ellipsoid">alt meter</param>
+        <param index="5" label="vehicle_yaw">angle yaw of vehicle in degree</param>
+        <param index="6" label="gimbal_pitch">angle pitch of gimbal in degree</param>
+        <param index="7" label="gimbal_yaw">angle yaw of gimbal in degree</param>
+      </entry>
+
+      <entry value="5" name="VEDIO_CONTROL">
+        <description>set mount mode</description>
+        <param index="1" label="enable">true means start recording</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="6" name="CAMERA_ZOOM">
+        <description> camera zoom control</description>
+        <param index="1" label="zoom_num">0--40 * 10</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="7" name="IMAGE_SWITCH">
+        <description>switch ir or visible image</description>
+        <param index="1" label="visible_enable">bit[0]:output enable/disable bit[1:7]:enum VISIBLE_TYPE</param>
+        <param index="2" label="ir_enable">bit[0]:output enable/disable bit[1:7]:ir_type</param>
+        <param index="3" label="stream_type">reference enum STREAM_TYPE</param>
+        <param index="4" label="laser_enable">bit[0]:output enable/disable</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="8" name="CONTROL_POINT">
+        <description>point_control</description>
+        <param index="1" label="mode" enum="CTL_POINT_MODE">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="pix_x" minValue="-1" maxValue="1">horizontal direction</param>
+        <param index="5" label="pix_y" minValue="-1" maxValue="1">vertical direction</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="9" name="AIREC_TRACK_CONTROL">
+        <description>track control</description>
+        <param index="1" label="track">bit[0]:track function enable/disable bit[1]:valid of target id bit[2:7] target id</param>
+        <param index="2" label="recognition">bit[0]:people; bit[1]:car</param>
+        <param index="3" label="track_source">enum AITRACK_SOURCE</param>
+        <param index="4" label="rectangle_x1" minValue="-1" maxValue="1">left-up point of recognize rectangle</param>
+        <param index="5" label="rectangle_y1" minValue="-1" maxValue="1">left-up point of recognize rectangle</param>
+        <param index="6" label="rectangle_x2" minValue="-1" maxValue="1">right-down point of recognize rectangle</param>
+        <param index="7" label="rectangle_y2" minValue="-1" maxValue="1">right-down point of recognize rectangle</param>
+      </entry>
+
+      <entry value="10" name="CAMERA_ZOOM_RATE">
+        <description> camera zoom control</description>
+        <param index="1" label="zoom_rate">-100~100</param>
+        <param index="2" label="focus_mode">0:disable 1:auto 2:manual</param>
+        <param index="3" label="manual_focus_mode">0:stop 1:increase 2:decrease</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="11" name="RECOGNIZE_CONTROL">
+        <description> recognize control </description>
+        <param index="1" label="recognition">bit[0]:people; bit[1]:car</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+   
+      <entry value="12" name="CAMERA_TEMPERATURE">
+        <description> temperature control  </description>
+        <param index="1" label="trigger">[0~1]:1:Drop,2:Frame,3:All [2]:1:enable 0:disable</param>
+        <param index="2" label="param2">|Drop:x| |Frame:startx|</param>
+        <param index="3" label="param3">|Drop:y| |Frame:starty|</param>
+        <param index="4" label="param4">|      | |Frame:endx  |</param>
+        <param index="5" label="param5">|      | |Frame:endx  |</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="13" name="GET_TRIGGER_STATE">
+        <description> get tirgger state  </description>
+        <param index="1" label="index_total">total times of trigger</param>
+        <param index="2" label="index_mission">trigger from auto mission</param>
+        <param index="3" label="index_manual">trigger by manual</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="14" name="CAMERA_RESTART">
+       <description> restart the camera  </description>
+       <param index="1" label="visible_enable">Empty</param>
+       <param index="2" label="ir_enable">Empty</param>
+       <param index="3" label="param3">Empty</param>
+       <param index="4" label="param4">Empty</param>
+       <param index="5" label="param5">Empty</param>
+       <param index="6" label="param6">Empty</param>
+       <param index="7" label="param7">Empty</param>
+     </entry>   
+     
+     <entry value="15" name="SET_IR_GAIN">
+       <description>  set ir gain  </description>
+       <param index="1" label="ir_gain">0:low gain ;1:high gain</param>
+       <param index="2" label="param2">Empty</param>
+       <param index="3" label="param3">Empty</param>
+       <param index="4" label="param4">Empty</param>
+       <param index="5" label="param5">Empty</param>
+       <param index="6" label="param6">Empty</param>
+       <param index="7" label="param7">Empty</param>
+     </entry> 
+    </enum>
+
+    <enum name="UAT_AGRO_CMD">
+      <description>agro command type and description</description>
+
+      <entry value="2" name="CMD_SOLENOID_ENABLE">
+        <description>enable solenoid</description>
+        <param index="1" label="solenoid1">1:on 0:off</param>
+        <param index="2" label="solenoid2">1:on 0:off</param>
+        <param index="3" label="solenoid3">1:on 0:off</param>
+        <param index="4" label="solenoid4">1:on 0:off</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="3" name="CMD_PUMP_ENABLE">
+        <description>enable pump</description>
+        <param index="1" label="pump1">1:on 0:off</param>
+        <param index="2" label="pump2">1:on 0:off</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="4" name="CMD_LED_ENABLE">
+        <description>enable led</description>
+        <param index="1" label="led">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="5" name="CMD_FLOW_METER_ENABLE">
+        <description>enable flow meter</description>
+        <param index="1" label="flow_meter">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="6" name="CMD_ROT_LIDAR_ENABLE">
+        <description>enable rot lidar</description>
+        <param index="1" label="rot_lidar">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="7" name="CMD_OTHERS_LIDAR_ENABLE">
+        <description>enable others lidar</description>
+        <param index="1" label="others_lidar">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="8" name="CMD_SDK_ENABLE">
+        <description>enable sdk</description>
+        <param index="1" label="sdk">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="9" name="CMD_LED_BRIGHTNESS_CTL">
+        <description>control led brightness</description>
+        <param index="1" label="brightness1">0-100</param>
+        <param index="2" label="brightness2">0-100</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="10" name="CMD_PUMP_RATE_CTL">
+        <description>control pump speed</description>
+        <param index="1" label="rate1">0-100</param>
+        <param index="2" label="rate2">0-100</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+       <entry value="11" name="CMD_SPRAYER_RATE_CTL">
+        <description>control sprayer speed</description>
+        <param index="1" label="rate1">0-100</param>
+        <param index="2" label="rate2">0-100</param>
+        <param index="3" label="rate3">0-100</param>
+        <param index="4" label="rate4">0-100</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="12" name="CMD_5G_ENABLE">
+        <description>enable 5G</description>
+        <param index="1" label="5G">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="13" name="CMD_WEIGHT_ENABLE">
+        <description>enable weight module</description>
+        <param index="1" label="weight">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="14" name="CMD_SPRAY_ENABLE">
+        <description>enable spray module</description>
+        <param index="1" label="spray">1:on 0:off</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="15" name="CMD_AGRO_CAL">
+        <description>agro calibration</description>
+        <param index="1" label="weight">1:bias 2: weight 3: set K value</param>
+        <param index="2" label="pump">1: left pump 2: right pump</param>
+        <param index="3" label="flowmeter">1:left pipe 2:right pipe 3:reset to default</param>
+        <param index="4" label="param4">K1 or cal status</param>
+        <param index="5" label="param5">K2</param>
+        <param index="6" label="param6">K3</param>
+        <param index="7" label="param7">K4</param>
+      </entry>
+      <entry value="16" name="CMD_GET_CAL_STATUS">
+        <description>get calibration status</description>
+        <param index="1" label="weight">1:bias 2: weight</param>
+        <param index="2" label="pump">1: left pump 2: right pump</param>
+        <param index="3" label="flowmeter">1:left pipe 2:right pipe</param>
+        <param index="4" label="param4">cal status</param>
+        <param index="5" label="param5">error code</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="17" name="CMD_PIPE_CTL">
+        <description>pipe control</description>
+        <param index="1" label="pipe">1:clean 2:exhaust</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="18" name="CMD_FARM_HEADING_CTL">
+        <description>Manual+ farm heading control</description>
+        <param index="1" label="heading_lock">0: unlock 1:lock</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="19" name="CMD_FARM_PARALLEL_MOVE">
+        <description>Manual+ farm parallel movement</description>
+        <param index="1" label="distance">uints:cm</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="21" name="CMD_FARM_U_TURN">
+        <description>Manual+ farm u turn</description>
+        <param index="1" label="angle">uints:degree</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="23" name="CMD_MANUAL_SPRAY_PARAMS_OVERRIDE">
+        <description>Overide manual spray params</description>
+        <param index="1" label="alt_rel_crops">uints:cm</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width">uints:cm</param>
+        <param index="4" label="flow_rate">uints:ml/min</param>
+        <param index="5" label="operation_flag">Empty</param>
+        <param index="6" label="mu_usage">uints:ml/mu</param>
+        <param index="7" label="velocity">uints:m/s</param>
+      </entry>
+       <entry value="24" name="CMD_MISSION_SPRAY_PARAMS_OVERRIDE">
+        <description>Overide mission spray params</description>
+        <param index="1" label="alt_rel_crops">uints:cm</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width">uints:cm</param>
+        <param index="4" label="flow_rate">uints:ml/min</param>
+        <param index="5" label="operation_flag">Empty</param>
+        <param index="6" label="mu_usage">uints:ml/mu</param>
+        <param index="7" label="velocity">uints:m/s</param>
+      </entry>
+      <entry value="26" name="CMD_SPREAD_GATE_CTL">
+        <description>control gate throttle</description>
+        <param index="1" label="gate_throttle">0-100</param>
+        <param index="2" label="param2">0-100</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="27" name="CMD_SPREAD_DISK_CTL">
+        <description>control disk rpm </description>
+        <param index="1" label="disk_rpm">0-1100 rpm</param>
+        <param index="2" label="param2">0-100</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="28" name="CMD_SPREAD_CAL">
+        <description>spread calibrate </description>
+        <param index="1" label="cal_cmd">1:start 2:cancel 3:reset</param>
+        <param index="2" label="material_index">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="29" name="CMD_GET_SPREAD_CAL_STATUS">
+        <description>get spread calibrate state </description>
+        <param index="1" label="state">0:not start 1:doning 2:completed 3:fail</param>
+        <param index="2" label="param2">progress</param>
+        <param index="3" label="param3">error code</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="30" name="CMD_GET_SPREAD_CAL_VALUE">
+        <description>get spread calibrate value </description>
+        <param index="1" label="materail_index">Empty</param>
+        <param index="2" label="gate_throttle">0~100</param>
+        <param index="3" label="flow_vel">uints:g/min</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="34" name="CMD_MANUAL_SPREAD_PARAMS_OVERRIDE">
+        <description>Overide manual spread params</description>
+        <param index="1" label="alt_rel_crops">uints:cm</param>
+        <param index="2" label="disk_rpm">uints:rpm</param>
+        <param index="3" label="spread_width">uints:cm</param>
+        <param index="4" label="volatile_value">Empty</param>
+        <param index="5" label="operation_flag">Empty</param>
+        <param index="6" label="mu_usage">uints:g/mu</param>
+        <param index="7" label="velocity">uints:m/s</param>
+      </entry>
+       <entry value="35" name="CMD_MISSION_SPREAD_PARAMS_OVERRIDE">
+        <description>Overide mission spread params</description>
+        <param index="1" label="alt_rel_crops">uints:cm</param>
+        <param index="2" label="disk_rpm">uints:rpm</param>
+        <param index="3" label="spread_width">uints:cm</param>
+        <param index="4" label="volatile_value">Empty</param>
+        <param index="5" label="operation_flag">Empty</param>
+        <param index="6" label="mu_usage">uints:g/mu</param>
+        <param index="7" label="velocity">uints:m/s</param>
+      </entry>
+       <entry value="36" name="CMD_SPRAY_PARAMS_OVERRIDE">
+        <description>Overide spray params</description>
+        <param index="1" label="alt_rel_crops">uints:cm</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width">uints:cm</param>
+        <param index="4" label="speed_cms">uints:cm/s</param>
+        <param index="5" label="operation_flag">Empty</param>
+        <param index="6" label="usage">Empty</param>
+        <param index="7" label="mode">Empty</param>
+      </entry>
+      <entry value="37" name="CMD_SPREAD_PARAMS_OVERRIDE">
+        <description>Overide spread params</description>
+        <param index="1" label="alt_rel_crops">uints:cm</param>
+        <param index="2" label="disk_rpm">Empty</param>
+        <param index="3" label="spread_width">uints:cm</param>
+        <param index="4" label="speed_cms">uints:cm/s</param>
+        <param index="5" label="operation_flag">Empty</param>
+        <param index="6" label="usage">Empty</param>
+        <param index="7" label="mode">Empty</param>
+      </entry>
+      <entry value="38" name="CMD_GET_SPREAD_CAL_CHECKSUM">
+        <description>get spread cal checksum</description>
+        <param index="1" label="materail_index">Empty</param>
+        <param index="2" label="crc_checksum">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="39" name="CMD_CLEAR_SPREAD_CAL_VALUE">
+        <description>clear spread cal value</description>
+        <param index="1" label="materail_index">Empty</param>
+        <param index="2" label="param2">0:fail 1:success</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="40" name="CMD_SPRAY_SPIN_ENABLE">
+        <description>enable spray spin</description>
+        <param index="1" label="enable">0:disable 1:enable</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="41" name="CMD_SET_REMAINNIG_VOL">
+        <description>manual remaining vol setting</description>
+        <param index="1" label="enable">0:disable 1:enable</param>
+        <param index="2" label="vol_ml">remaining vol,0~55000ml</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="42" name="CMD_GET_K_VALUE">
+        <description>get weight sensor K value</description>
+        <param index="1" label="request">1:request all</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="K1">response</param>
+        <param index="5" label="K2">response</param>
+        <param index="6" label="K3">response</param>
+        <param index="7" label="K4">response</param>
+      </entry>
+      </enum>
+
+    <enum name="MAV_CMD">
+      <description>Commands to be executed by the MAV</description>
+
+      <entry value="15" name="MAV_CMD_MISSION_ATTRIBUTE">
+        <description>attribute of current mission </description>
+        <param index="1" label="param1">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="31015" name="UAT_CMD_START_SPRAY">
+        <description>set spray param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width" units="cm">Empty</param>
+        <param index="4" label="flow_rate" units="ml/min">desired flow rate </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="mu_usage" units="ml/mu">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+      <entry value="31016" name="UAT_CMD_STOP_SPRAY">
+        <description>set spray param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width" units="cm">Empty</param>
+        <param index="4" label="flow_rate" units="ml/min">desired flow rate </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="mu_usage" units="ml/mu">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+      <entry value="31017" name="UAT_CMD_START_SPREAD">
+        <description>set spread param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="disk_rpm">Empty</param>
+        <param index="3" label="spread_width" units="cm">Empty</param>
+        <param index="4" label="volatile">Empty </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="mu_usage" units="g/mu">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+      <entry value="31018" name="UAT_CMD_STOP_SPREAD">
+        <description>set spread param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="disk_rpm">Empty</param>
+        <param index="3" label="spread_width" units="cm">Empty</param>
+        <param index="4" label="volatile">Empty </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="mu_usage" units="g/mu">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+       <entry value="31019" name="UAT_CMD_DO_START_SPRAY">
+        <description>set spray param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width" units="cm">Empty</param>
+        <param index="4" label="speed_cms" units="cm/s">max speed </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="usage">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+       <entry value="31020" name="UAT_CMD_DO_STOP_SPRAY">
+        <description>set spray param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="droplet_size">Empty</param>
+        <param index="3" label="spray_width" units="cm">Empty</param>
+        <param index="4" label="speed_cms" units="cm/s">max speed </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="usage">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+      <entry value="31021" name="UAT_CMD_DO_START_SPREAD">
+        <description>set spread param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="disk_rpm">Empty</param>
+        <param index="3" label="spread_width" units="cm">Empty</param>
+        <param index="4" label="speed_cms" units="cm/s">max speed </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="usage">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+      <entry value="31022" name="UAT_CMD_DO_STOP_SPREAD">
+        <description>set spread param</description>
+        <param index="1" label="alt_rel_crops" units="cm">altitude relative to crops</param>
+        <param index="2" label="disk_rpm">Empty</param>
+        <param index="3" label="spread_width" units="cm">Empty</param>
+        <param index="4" label="speed_cms" units="cm/s">max speed </param>
+        <param index="5" label="operation_flag" enum="UAT_AGRO_OPERATION" >Bitmask UAT_AGRO_OPERATION</param>
+        <param index="6" label="usage">Empty</param>
+        <param index="7" label="mode">Reserved</param>
+      </entry>
+
+      <entry value="31023" name="UAT_CMD_DO_SET_TRANSFER_POINT">
+        <description>set transfer point</description>
+        <param index="1" label="use_current">Use current (1=use current location, 0=use specified location)</param>
+        <param index="2" >Empty</param>
+        <param index="3" >Empty</param>
+        <param index="4" >Empty </param>
+        <param index="5" label="latitude">Empty</param>
+        <param index="6" label="longitude">Empty</param>
+        <param index="7" label="altitude">m</param>
+      </entry>
+
+      <entry value="31024" name="UAT_CMD_HALYARD_CONTROL">
+        <description>halyard control</description>
+        <param index="1" label="mode"> 0:idle 1:retract 2:release</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="31025" name="UAT_CMD_THROW_CONTROL">
+        <description>halyard control</description>
+        <param index="1" label="release"> bitmask index of position </param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+    </enum>
+
+    <enum name="UAT_COMMON_CMD">
+      <description>mount command type and description</description>
+
+      <entry value="1" name="ARM_LIGHT_CTL">
+        <description>control arm light</description>
+        <param index="1" label="on/off">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="2" name="BLINK_LIGHT_CTL">
+        <description>control blink light</description>
+        <param index="1" label="on/off">Empty</param>
+        <param index="2" label="frequence" units="Hz">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="3" name="VISION_DEEP_CTL">
+        <description>control vision deep distance</description>
+        <param index="1" label="on/off">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="4" name="VISION_OP_CTL">
+        <description>control optic flow </description>
+        <param index="1" label="on/off">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="5" name="VISION_NAVIGATION_CTL">
+        <description>control april tag flow </description>
+        <param index="1" label="on/off">Empty</param>
+        <param index="2" label="type"> 0:disable 1:apriltag 2:map_nav </param>
+        <param index="3" label="apriltag_id">witch apriltag need to recognize</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="6" name="FILL_LIGHT_CTL">
+        <description>control fill light </description>
+        <param index="1" label="on/off">0:off 1:enable 0xff:request status</param>
+        <param index="2" label="level" minValue="0" maxValue="10">scale with hardware</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="7" name="GET_PERIPHERAL_VERSION">
+        <description>get peripheral version </description>
+        <param index="1" label="device_type">type</param>
+        <param index="2" label="device_id">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="8" name="IDENTIFY_BREAKPOINT">
+        <description>from gcs to vehicle,identify get breakpoint  </description>
+        <param index="1" label="param1">type</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="9" name="OFFBOARD_UPGRADE">
+        <description>force nx recover mode </description>
+        <param index="1" label="param1">type</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="10" name="SET_LIGHT_SWITCH">
+        <description>Turn on or off the light </description>
+        <param index="1" label="enable">0: close 1: open</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="11" name="SET_LIGHT_BRIGHTNESS">
+        <description>Set light brightness </description>
+        <param index="1" label="brightness">brightness range: 0-100</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="12" name="SET_LIGHT_FLASH">
+        <description>Turn on or off the flashing state </description>
+        <param index="1" label="enable">0: close 1: open</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="13" name="POWEROFF_REQUEST">
+        <description> power off battery</description>
+        <param index="1" label="power">0: close power 1: power on 2:chargeactive 3:charge inactive </param>
+        <param index="2" label="pre_active">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>     
+      
+      <entry value="14" name="SET_ARM_THROW">
+        <description>Execution throw </description>
+        <param index="1" label="param1">throwing hook position: 0~4: One-click toss:0xff</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="15" name="SET_ARM_HANGER">
+        <description>lock state </description>
+        <param index="1" label="lock">1: locked 0: unlocked</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="16" name="ALT_CMD_CTL">
+        <description>command of ALT Co.Ltd </description>
+        <param index="1" label="sub_cmd"> 1:force idle</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="17" name="PROLAND_COTNROL">
+        <description>control cmd for protect landing function </description>
+        <param index="1" label="sub_cmd"> 1:enable landing protect function 0:disable </param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="18" name="DATALINK_PAIR">
+        <description>datalink pair contol </description>
+        <param index="1" label="param1">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="19" name="FAN_DETECTION">
+        <description>fan rpm detect  param only use for result ack</description>
+        <param index="1" label="param1">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="20" name="RESTART_OFFBOARD_COMPUTER">
+        <description>restart offboard computer if necessary</description>
+        <param index="1" label="param1">1:enable 0:disable</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="21" name="HALYARD_CTL">
+        <description> halyard control</description>
+        <param index="1" label="mode">0:stop 1:up 2:down</param>
+        <param index="2" label="height">0~1500cm</param>
+        <param index="3" label="wirecut">1:enable 0:disable</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="22" name="SET_RTK_FIXED_MODE">
+        <description>gnss module switch to rtk fixed mode if user select</description>
+        <param index="1" label="param1">1:enable 0:disable</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+	
+
+      <entry value="23" name="GET_BATTERY_TOTAL_TIME">
+        <description>GET_BATTERY_TOTAL_TIME </description>
+        <param index="1" label="total_time">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="24" name="DO_MAG_CAL_ACT">
+        <description>trigger for do mag auto cal </description>
+        <param index="1" label="param1">0:disable 1:trigger 2:start spin 3:stop spin</param>
+        <param index="2" label="param2">0:none 1:app query 2:reply cal ok 3:reply cal fail</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="25" name="NETLINK_CTL">
+        <description>netlink control example 4G/5G </description>
+        <param index="1" label="enable">0:disable 1:enable 0xff:request status</param>
+        <param index="2" label="stream_type">0:disable 1:only fpv 2:only main video 3:main with fpv 3:fpv with main </param>
+        <param index="3" label="mount_devid">mount device id</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="26" name="TRANSMIT_GCS_UID">
+        <description>send remote uid to vehicle </description>
+        <param index="1" label="sn_h"> high 32bit of sn</param>
+        <param index="2" label="sn_m"> mid 32bit of sn </param>
+        <param index="3" label="sn_l"> low 32bit of sn </param>
+      </entry>
+      
+      <entry value="27" name="RMLD_CTL">
+        <description>Infrared laser methane tele-detector</description>
+        <param index="1" label="alarm_threshold">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="28" name="ALLOTID_CTL">
+        <description>Allocation ESC uavcan node ID</description>
+        <param index="1" label="enable">0:disable 1:enable</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="29" name="VIDEO_BPS_CTL">
+        <description>Setting the bitrate of the video stream.</description>
+        <param index="1" label="bps">1:1M 2:1.5M 3:2M 4:4M 5:8M 6:12M </param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <!-- only use for JXM2.0 -->
+      <entry value="30" name="GPS_SWITCH"> 
+        <description>control navigation use gps or vio</description>
+        <param index="1" label="param1">0:disable 1:enable</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry> <!-- only use for JXM2.0 -->
+
+      <entry value="31" name="DO_REFLY_BREAKPOINT">
+        <description>restart from breakpoint whitch has record by UAT_BREAKPOINT_RECORD</description>
+        <param index="1" label="breakpoint_lat">latitude in degrees * 10^7</param>
+        <param index="2" label="breakpoint_lon">longitude in degrees * 10^7</param>
+        <param index="3" label="breakpoint_alt">alt meter * 10^2</param>
+        <param index="4" label="mission_index">only use integer part</param>
+        <param index="5" label="action_type">action from breapoint</param>
+        <param index="6" label="action_enum">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="32" name="MAV_CMD_NAV_DUARATION_ARM" hasLocation="true" isDestination="true">
+        <description>uat command for duration arm function  </description>
+        <param index="1" label="param1">Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">duration of prearm in UAT_COMMON_CONTROL_ACK, 0:idle, 1:duration start 2:duration finish 3:duration break</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+            
+      <entry value="33" name="MAV_CMD_ALARM_CONTROL" hasLocation="true" isDestination="true">
+        <description>function for esc alarm control  </description>
+        <param index="1" label="mode">1:beep periodic </param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">duration of prearm in UAT_COMMON_CONTROL_ACK, 0:idle, 1:duration start 2:duration finish 3:duration break</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="34" name="SERVO_CTL">
+        <description>External visual board of servo switch</description>
+        <param index="1" label="switch1">0:disable 1:enable</param>
+        <param index="2" label="switch2">0:disable 1:enable</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="35" name="UPGRADE_UAVCAN">
+        <description>use for uavcan device UpgradeCMD.srv by ota</description>
+        <param index="1" label="param1">equal to srv param1</param>
+        <param index="2" label="param2">equal to srv param2</param>
+        <param index="3" label="param3">equal to srv type</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+
+      <entry value="36" name="RELEASE_ARM_LIMIT">
+        <description>release arm limit </description>
+        <param index="1" label="limit"> 0 means allow to arm vehicle,others means limit</param>
+        <param index="2" label="reserve">todo use verify</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="37" name="RELEASE_LATCH_LIMIT">
+        <description>release arm latch limit </description>
+        <param index="1" label="limit"> 1:means release limit</param>
+        <param index="2" label="reserve">todo use verify</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      
+      <entry value="38" name="SET_RADAR_MODE">
+        <description>set radar work mode </description>
+        <param index="1" label="mode" enum="RADAR_MODE_BITMASK"> Empty</param>
+        <param index="2" label="param2">Empty</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+    </enum>
+
+    <enum name="UAT_STATUS_TYPE">
+      <description>mount command type and description</description>
+      <entry value="1" name="TYPE_LIGHT">
+        <description>device type of light </description>
+        <param index="1" label="state">bitmask[0]:1=open bitmask[1]:flash active</param>
+        <param index="2" label="brightness">brightness range: 0-100</param>
+        <param index="3" label="param3">Empty</param>
+        <param index="4" label="temp_light">temperature of light invalid="-99.99"</param>
+        <param index="5" label="temp_camera">temperature of camera invalid="-99.99"</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="2" name="TYPE_THROW">
+        <description>device type of light </description>
+        <param index="1" label="state">1: locked 0: unlocked</param>
+        <param index="2" label="location">throwing hook position: 0~4</param>
+        <param index="3" label="error">0xc0:stuck</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="3" name="DROP_TEMP">
+        <description> </description>
+        <param index="1" label="x">Empty</param>
+        <param index="2" label="y">Empty</param>
+        <param index="3" label="temp">Empty</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="4" name="FRAME_TEMP">
+        <description></description>
+        <param index="1" label="max_x">Empty</param>
+        <param index="2" label="max_y">Empty</param>
+        <param index="3" label="min_x">Empty</param>
+        <param index="4" label="min_y">Empty</param>
+        <param index="5" label="temp_max">Empty</param>
+        <param index="6" label="temp_min">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="5" name="TYPE_HALYARD">
+        <description></description>
+        <param index="1" label="mode">0:stop 1:up 2:down 3:up_height 4:down_height</param>
+        <param index="2" label="height">0~1500cm</param>
+        <param index="3" label="wire_cut">0:cutted 1:uncut</param>
+        <param index="4" label="param4">Empty</param>
+        <param index="5" label="param5">Empty</param>
+        <param index="6" label="param6">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+      <entry value="6" name="TYPE_RMLD">
+        <description></description>
+        <param index="1" label="camera_state">0:disable 1:enable</param>
+        <param index="2" label="record_state">0:disable 1:enable</param>
+        <param index="3" label="laser_state">0:disable 1:enable</param>
+        <param index="4" label="alarm_thresh">Empty</param>
+        <param index="5" label="CH4_conc">Empty</param>
+        <param index="6" label="light_intensity">Empty</param>
+        <param index="7" label="param7">Empty</param>
+      </entry>
+    </enum>
+  </enums>
+  <!-- use common.xml messages -->
+  <messages>
+    <message id="180" name="UAT_MAV2UAVCAN">
+      <description>GCS mavlink to UAVCAN</description>
+      <field type="uint32_t[4]" name="device_id">target payload id</field>
+      <field type="uint8_t" name="valid_len">valid length of buf</field>
+      <field type="uint8_t[238]" name="buf">buf</field>
+    </message>
+
+    <message id="181" name="UAT_UAVCAN2MAV">
+      <description>GCS mavlink to UAVCAN</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint8_t" name="valid_len">valid length of buf</field>
+      <field type="uint8_t[250]" name="buf">buf</field>
+    </message>
+
+    <message id="182" name="UAT_MOUNT_CONTROL">
+      <description>UAT_MOUNT_CONTROL</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="command" enum="UAT_MOUNT_CMD">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="183" name="UAT_MOUNT_CONTROL_ACK">
+      <description>UAT_MOUNT_CONTROL_ACK</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="command" enum="UAT_MOUNT_CMD">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="184" name="UAT_MOUNT_STATUS">
+      <description> send mount status in fix frequency</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="int16_t" name="pitch">Empty </field>
+      <field type="int16_t" name="roll">Empty </field>
+      <field type="int16_t" name="yaw">Empty </field>
+      <field type="uint8_t" name="mount_mode">reference enum UAT_MOUNT_MODE </field>
+    </message>
+
+    <message id="185" name="UAT_RECOGNIZE_STATUS">
+      <description> recognize</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint8_t" name="target_id"></field>
+      <field type="uint8_t" name="rec_type"></field>
+      <field type="float" name="rec_confidence"></field>
+      <field type="float" name="rectangle_x1">empty </field>
+      <field type="float" name="rectangle_y1">empty </field>
+      <field type="float" name="rectangle_x2">empty </field>
+      <field type="float" name="rectangle_y2">empty </field>
+    </message>
+
+    <message id="186" name="UAT_TRACK_STATUS">
+      <description> recognize and track state</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint8_t" name="target_id"></field>
+      <field type="uint8_t" name="track_state"> enum AITRACK_STATE </field>
+      <field type="uint8_t" name="track_source"> enum AITRACK_SOURCE </field>
+      <field type="uint8_t" name="rec_type"></field>
+      <field type="float" name="rec_confidence"></field>
+      <field type="float" name="rectangle_x1">empty </field>
+      <field type="float" name="rectangle_y1">empty </field>
+      <field type="float" name="rectangle_x2">empty </field>
+      <field type="float" name="rectangle_y2">empty </field>
+      <field type="int32_t" name="latitude">latitude in degrees * 10^7 </field>
+      <field type="int32_t" name="longitude">longitude in degrees * 10^7 </field>
+      <field type="int16_t" name="alt">alt meter * 10^2</field>
+    </message>
+
+    <message id="187" name="UAT_DISTANCE_SENSOR">
+      <description> distance sensor data use between ros autopilot gcs</description>
+      <field type="uint8_t" name="bitmask_hor">bitmask[7:0] valid is true</field>
+      <field type="uint16_t[8]" name="dis_hor">Positive direction of x-axis is sector[0],each sector is 45 deg</field>
+      <field type="uint8_t" name="bitmask_ver"> bitmask[1:0] valid is true  </field>
+      <field type="uint16_t[2]" name="dis_ver"> down direction is sector[0] </field>
+    </message>
+
+    <message id="188" name="UAT_APRILTAG_SENSOR">
+      <description> apriltag or other sign recognize for precland function</description>
+      <field type="uint8_t" name="sensor_type">bitmask[7:0] valid is true</field>
+      <field type="int16_t" name="theta_x" units="radE2">theta is the angle between target and the vehicle along the vehicle body x-axis</field>
+      <field type="int16_t" name="theta_y" units="radE2">theta is the angle between target and the vehicle along the vehicle body y-axis</field>
+      <field type="uint8_t" name="dis_vaild"> true if the distance offset is valid</field>
+      <field type="int16_t" name="dis_x"> the distance between target and the vehicle along the vehicle body x-axis </field>
+      <field type="int16_t" name="dis_y"> the distance between target and the vehicle along the vehicle body y-axis </field>
+      <field type="int16_t" name="offset_yaw"> Euler yaw angle between vehicle head relative to tag positive direction </field>
+    </message>
+
+    <message id="189" name="UAT_COMMON_CONTROL">
+      <description>UAT_COMMON_CONTROL</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="command" enum="UAT_COMMON_CMD">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="190" name="UAT_OFFBOARD_STATE">
+      <description>offboard module state (temperature or cpu load..)</description>
+      <field type="int8_t" name="temperature">temperature</field>
+      <field type="int16_t" name="cpuload">Empty </field>
+      <field type="uint8_t" name="ofb_unix_valid">ofb and onb sync finish </field>
+      <field type="uint32_t" name="radar_status">  </field>
+      <field type="uint32_t" name="vision_status">  </field>
+      <field type="uint32_t" name="offb_status">  </field>
+      <field type="uint32_t" name="sensor_status">  </field>
+      <field type="uint32_t" name="uat_status">  </field>
+    </message>
+
+    <message id="191" name="UAT_BREAKPOINT_RECORD">
+      <description>record mission break point send to gcs during the return process if the task has not been completed,until receive IDENTIFY_BREAKPOINT </description>
+      <field type="int32_t" name="breakpoint_lat">latitude in degrees * 10^7 </field>
+      <field type="int32_t" name="breakpoint_lon">longitude in degrees * 10^7 </field>
+      <field type="int16_t" name="breakpoint_alt">alt meter * 10^2</field>
+      <field type="uint16_t" name="mission_index"></field>
+      <field type="int16_t" name="reserve1"></field>
+      <field type="int16_t" name="reserve2"></field>
+      <field type="int16_t" name="reserve3"></field>
+    </message>
+
+    <message id="193" name="UAT_CAMERA_STATUS">
+      <description>camera status to gcs </description>
+      <field type="uint8_t" name="visible_state">bit[0]:output enable/disable bit[1:7]:enum VISIBLE_TYPE</field>
+      <field type="uint8_t" name="ir_state">bit[0]:output enable/disable bit[1:7]:enum IR_PALETTES</field>
+      <field type="uint8_t" name="laser_state">bit[0]:output enable/disable </field>
+      <field type="uint16_t" name="visible_zoom">visible zoom number * 10 </field>
+      <field type="uint16_t" name="ir_zoom">ir zoom number * 10 </field>
+      <field type="uint16_t" name="laser_distance">distance unit:m </field>
+      <field type="uint8_t" name="camera_state">bit[0]:recording bit[1:3] stream_type </field>
+      <field type="int32_t" name="target_lon_deg_1e7"></field>
+      <field type="int32_t" name="target_lat_deg_1e7"></field>
+    </message>
+
+    <message id="194" name="UAT_GAUSS">
+      <description>gauss projected coordinate unit:cm </description>
+      <field type="uint8_t" name="bitmask_hor">bit[0]:vehicle_pos  bit[1]:target_pos</field>
+      <field type="int8_t" name="vehicle_deg6_zoom">vehicle_deg6_zoom x</field> 
+      <field type="int32_t" name="vehilce_x">projection x</field>
+      <field type="int32_t" name="vehilce_y">projection y </field>
+      <field type="int8_t" name="target_deg6_zoom">target_deg6_zoom x</field> 
+      <field type="int32_t" name="target_x">projection x</field>
+      <field type="int32_t" name="target_y">projection y </field>
+    </message>
+
+    <message id="195" name="UAT_COMMON_STATUS">
+      <description>UAT_COMMON_STATUS</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="type" enum="UAT_STATUS_TYPE">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="196" name="UAT_BATTERY_STATUS">
+      <description>UAT_BATTERY_STATUS</description>
+      <field type="uint32_t" name="device_id">Battery ID</field>
+      <field type="uint16_t" name="state" enum="UAT_BATTERY_STATE" display="bitmask"> bitmask of battery state</field>
+      <field type="uint8_t" name="health" units="%"> </field>
+      <field type="uint16_t" name="voltage_battery" units="mV" invalid="UINT16_MAX">Battery voltage</field>
+      <field type="int16_t" name="current_battery" units="mA" invalid="-1">Battery current</field>
+      <field type="int8_t" name="battery_remaining" units="%" invalid="-1">Battery energy remaining</field>
+      <field type="uint32_t" name="time_remaining" units="s" invalid="0">Remaining battery time</field>
+      <field type="int8_t" name="temperature" units="cdegC" invalid="-1">Battery energy remaining</field>
+      <field type="uint16_t" name="cycle_count" invalid="UINT16_MAX">Charge/discharge cycle count. UINT16_MAX: field not provided.</field>
+      <field type="uint16_t[14]" name="voltages" units="mV" invalid="[UINT16_MAX]">Battery voltage of cells 1 to 14</field>
+    </message>
+
+    <message id="197" name="UAT_SYS_STATUS">
+      <description>The system's state.</description>
+      <field type="uint64_t" name="event_code1" enum="EVENT_CODE1" display="bitmask">A bit represents a message</field>
+      <field type="uint64_t" name="event_code2" enum="EVENT_CODE2" display="bitmask">A bit represents a message.</field>
+      <field type="uint64_t" name="event_code3" enum="EVENT_CODE3" display="bitmask">A bit represents a message.</field>
+      <field type="uint64_t" name="event_code4" enum="EVENT_CODE4" display="bitmask">A bit represents a message.</field>
+    </message>
+
+    <message id="198" name="UAT_COMMON_CONTROL_ACK">
+      <description>UAT_COMMON_CONTROL_ACK</description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="command" enum="UAT_COMMON_CMD">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="199" name="UAT_ERROR_CODE">
+      <description>The system's state.</description>
+      <field type="uint8_t" name="severity">0:emergency;2:critical;4:warning;6:info; </field>
+      <field type="uint64_t" name="event">An event sequence number represents a message.</field>
+    </message>
+    
+    <message id="200" name="UAT_PARACHUTE_STATUS">
+      <description>parachute status.</description>
+      <field type="uint32_t" name="device_id">Parachute ID</field>
+      <field type="uint16_t" name="main_power_voltages" units="mV"></field>
+      <field type="uint16_t" name="backup_power_voltages" units="mV"></field>
+      <field type="uint8_t" name="state" enum="PARACHUTE_STATE"> bitmask</field>
+    </message>
+
+    <message id="201" name="UAT_COMMON_CAMERA_STATUS">
+      <description>common camera status to gcs instead #193 </description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint8_t" name="visible_state">bit[0]:output enable/disable </field>
+      <field type="uint8_t" name="ir_state">bit[0]:output enable/disable bit[1:7]:enum IR_PALETTES</field>
+      <field type="uint8_t" name="laser_state">bit[0]:output enable/disable </field>
+      <field type="uint16_t" name="visible_zoom">visible zoom number * 10 </field>
+      <field type="uint16_t" name="ir_zoom">ir zoom number * 10 </field>
+      <field type="uint16_t" name="laser_distance">distance unit:m </field>
+      <field type="uint8_t" name="camera_state">bit[0]:recording bit[1:3] stream_type </field>
+      <field type="int32_t" name="target_lon_deg_1e7"></field>
+      <field type="int32_t" name="target_lat_deg_1e7"></field>
+    </message>
+
+    <message id="222" name="UAT_RAW_IMU">
+      <description> raw imu message for offboard.</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="float" name="roll" units="rad">Roll angle (-pi..+pi)</field>
+      <field type="float" name="pitch" units="rad">Pitch angle (-pi..+pi)</field>
+      <field type="float" name="yaw" units="rad">Yaw angle (-pi..+pi)</field>
+      <field type="float" name="xgyro" units="rad/s">Roll angular speed</field>
+      <field type="float" name="ygyro" units="rad/s">Pitch angular speed</field>
+      <field type="float" name="zgyro" units="rad/s">Yaw angular speed</field>
+      <field type="float" name="xacc" units="m/s/s">X acceleration</field>
+      <field type="float" name="yacc" units="m/s/s">Y acceleration</field>
+      <field type="float" name="zacc" units="m/s/s">Z acceleration</field>
+    </message>
+
+    <message id="223" name="UAT_RAW_GNSS">
+      <description> raw gnss message for offboard.</description>
+      <field type="uint32_t" name="time_boot_ms" units="ms">Timestamp (time since system boot).</field>
+      <field type="int32_t" name="latitude" units="degE7"></field>
+      <field type="int32_t" name="longitude" units="degE7"></field>
+      <field type="int32_t" name="altitude" units="cm"></field>
+      <field type="uint8_t" name="fix_type" enum="GPS_FIX_TYPE"></field>
+      <field type="uint8_t" name="satellites_visible"></field>
+      <field type="uint16_t" name="ground_speed" units="cm/s"></field>
+      <field type="int16_t[3]" name="ned_vel" units="cm/s"></field>
+      <field type="uint16_t[3]" name="pos_std" units="cm"></field>
+      <field type="uint16_t[3]" name="vel_std" units="cm/s"></field>
+    </message>
+
+    <message id="224" name="UAT_NETLINK_STATUS">
+      <description>network datalink work status</description>
+      <field type="uint8_t" name="Network_type">Network type of 4/5G</field>
+      <field type="uint8_t" name="NIC_state">Network Interface Card state</field>
+      <field type="uint8_t" name="SIM_state">sim card state</field>
+      <field type="uint8_t" name="IP_state">ip address state</field>
+      <field type="uint8_t" name="single_quality">4g/5g single strength</field>
+      <field type="uint8_t" name="fpv_service_state">fpv function service working state</field>
+      <field type="uint8_t" name="trans_work_state">transmit function service working state</field>
+      <field type="uint8_t" name="server_connect_state">Cloud services connnect state</field>
+      <field type="int8_t" name="temperature">temperature of device</field>
+    </message>
+
+    <message id="226" name="UAT_UPGRADE_FRAME">
+      <description></description>
+      <field type="uint32_t" name="gcs_security_key"></field>
+      <field type="uint32_t" name="device_security_key"></field>
+      <field type="uint8_t" name="vaild_len"></field>
+      <field type="uint8_t[64]" name="buffer"></field>
+    </message>
+
+    <message id="227" name="UAT_ROSTEST">
+      <description></description>
+      <field type="uint8_t" name="cmd"></field>
+    </message>
+
+
+
+    <message id="228" name="UAT_UPGRADE_CMD">
+      <description></description>
+      <field type="uint32_t" name="gcs_security_key"></field>
+      <field type="uint32_t" name="device_security_key"></field>
+      <field type="uint8_t" name="cmd_type"></field>
+      <field type="uint32_t" name="value"></field>
+    </message>
+    <!-- 
+  0xA1:request device upgrade
+  0xA2:response request upgrade
+  0xB1:query device upgrade status
+  0xB2:response ready 
+  0xB3:response not ready
+  0xC1:gcs upgrade ready
+  0xD1:device request next firmware data
+  0xD2:device request current firmware data
+  0xE1:firmware upgrade over value is crc
+  0xE2:crc check upgrade ok 
+  0xE3:crc mismatch upgrade fail
+
+  uavcan node upgrade:
+  0x13:start transfer file to vehicle 
+  0x14:query the progress of file transfer
+  0x15:start upgrade uavcan node 
+  0x16:query the progress of upgrade state
+ -->
+
+    <message id="229" name="UAT_PERIPHERAL_VERSION">
+      <description></description>
+      <field type="uint32_t" name="device_type"></field>
+      <field type="uint32_t" name="device_id"></field>
+      <field type="uint32_t" name="firmware_version"></field>
+      <field type="uint32_t" name="firmware_git_hash"></field>
+      <field type="uint32_t" name="hardware_version"></field>
+      <field type="uint8_t[18]" name="uid">Unique device ID by hardware</field>
+    </message>
+    <!-- 
+UA_NODEID_AC          (7) 0x07
+UA_NODEID_GNSS        (11)0x0B
+UA_BATTERY_LEFT       (20)0X14
+UA_BATTERY_RIGHT      (21)0X15
+UA_VBASEBOARD	        (25)0X19
+UA_ESC_n                  0xFn
+
+32bit version 使用说明
+				major = (version >> (8 * 3)) & 0xFF;
+				minor = (version >> (8 * 2)) & 0xFF;
+				patch = (version >> (8 * 1)) & 0xFF;
+				type = (version >> (8 * 0)) & 0xFF;
+type用于标识release或者debug版本区分
+例如release v3.2.27对应字段关系
+major = 3
+minor = 2
+patch = 27
+type = 0xff
+version = 0x03031BFF
+ -->
+    <message id="889" name="UAT_APRILTAG_HIL">
+      <description></description>
+      <field type="uint64_t" name="image_time_usec" units="us"> time of camere get image</field>
+      <field type="float" name="position_x"></field>
+      <field type="float" name="position_y"></field>
+      <field type="float" name="position_z"></field>
+      <field type="float" name="roll"></field>
+      <field type="float" name="pitch"></field>
+      <field type="float" name="yaw"></field>
+      <field type="float" name="covariance"></field>
+    </message>
+
+    <message id="890" name="UAT_AGRO_CONTROL">
+      <description>use for uat agro system control </description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="command" enum="UAT_AGRO_CMD">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="891" name="UAT_SPRAYSYS_STATE">
+      <description>use for uat agro spray system control </description>
+	    <field type="uint8_t" name="liquid_empty"> 1：empty</field>
+      <field type="uint16_t" name="status_flag" enum="UAT_AGRO_STATE" >Bitmask UAT_AGRO_STATE</field>
+      <field type="uint16_t" name="vol_accum" units="10ml" >Empty</field>
+      <field type="uint16_t" name="volume_remaining" units="10ml"> Empty</field>
+      <field type="uint16_t" name="flow_vel" units="ml/min"> Empty</field>
+      <field type="uint16_t[2]" name="pump_rate"> Empty</field>
+      <field type="uint16_t[4]" name="spray_tray_rate"> [0]front_right [1]rear_left [2]front_left [3]rear_right</field>
+    </message>
+
+    <message id="892" name="UAT_AGRO_CONTROL_ACK">
+      <description>use for uat agro system control ack </description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint16_t" name="command" enum="UAT_AGRO_CMD">Empty </field>
+      <field type="int32_t" name="param1">Empty </field>
+      <field type="int32_t" name="param2">Empty </field>
+      <field type="int32_t" name="param3">Empty </field>
+      <field type="float" name="param4">Empty </field>
+      <field type="float" name="param5">Empty </field>
+      <field type="float" name="param6">Empty </field>
+      <field type="float" name="param7">Empty </field>
+    </message>
+
+    <message id="893" name="UAT_BATTERY_STATUS2">
+      <description>UAT_BATTERY_STATUS2</description>
+      <field type="uint32_t" name="device_id">Battery ID</field>
+      <field type="uint16_t" name="state" enum="UAT_BATTERY_STATE" display="bitmask"> bitmask of battery state</field>
+      <field type="uint8_t" name="health" units="%"> </field>
+      <field type="uint16_t" name="voltage_battery" units="mV" invalid="UINT16_MAX">Battery voltage</field>
+      <field type="int16_t" name="current_battery" units="mA" invalid="-1">Battery current</field>
+      <field type="int8_t" name="battery_remaining" units="%" invalid="-1">Battery energy remaining</field>
+      <field type="uint32_t" name="time_remaining" units="s" invalid="0">Remaining battery time</field>
+      <field type="int8_t" name="temperature" units="cdegC" invalid="-1">Battery energy remaining</field>
+      <field type="uint16_t" name="cycle_count" invalid="UINT16_MAX">Charge/discharge cycle count. UINT16_MAX: field not provided.</field>
+      <field type="uint16_t[18]" name="voltages" units="mV" invalid="[UINT16_MAX]">Battery voltage of cells 1 to 18</field>
+    </message>
+
+	<message id="895" name="UAT_GAMEPAD_CONTROL">
+	  <description> Gamepad authority switch control </description>
+	  <field type="uint32_t" name="device_id"> </field>
+	  <field type="uint8_t" name="target_id"/>
+	  <field type="uint8_t" name="trigger"/>
+	  <field type="uint8_t" name="designate_gamepad"> 0x06:mavlink joystick;0x09:sbus Master;0x10:uavcan futaba </field>
+	</message>
+
+	<message id="896" name="UAT_GAMEPAD_STATUS">
+	  <description>  </description>
+	  <field type="uint32_t" name="device_id"></field>
+	  <field type="uint8_t" name="onlink">bit 1:Master;bit 2:futaba;bit 3:joystick </field>
+	  <field type="uint8_t" name="gamepad">0x06:mavlink joystick;0x09:sbus Master;0x10:uavcan futaba </field>
+	</message>
+
+    <message id="897" name="UAT_AI_VISION_STATUS">
+      <description>AI module status in NX</description>
+      <field type="uint64_t" name="status">Ensure landing:bit[0]: Can land normally;bit[1]:Slow descent;bit[2]:Cannot land, hover alert;bit[3]:No available data, unable to determine </field> 
+    </message>
+
+    <message id="898" name="UAT_BATTERY_STATUS3">
+      <description>UAT_BATTERY_STATUS3</description>
+      <field type="uint32_t" name="device_id">Battery ID</field>
+      <field type="uint16_t" name="state" enum="UAT_BATTERY_STATE" display="bitmask"> bitmask of battery state</field>
+      <field type="uint8_t" name="health" units="%"> </field>
+      <field type="uint32_t" name="voltage_battery" units="mV" invalid="UINT32_MAX">Battery voltage</field>
+      <field type="int32_t" name="current_battery" units="mA" invalid="-1">Battery current</field>
+      <field type="int8_t" name="battery_remaining" units="%" invalid="-1">Battery energy remaining</field>
+      <field type="uint32_t" name="time_remaining" units="s" invalid="0">Remaining battery time</field>
+      <field type="int8_t" name="temperature" units="cdegC" invalid="-1">Battery energy remaining</field>
+      <field type="uint16_t" name="cycle_count" invalid="UINT16_MAX">Charge/discharge cycle count. UINT16_MAX: field not provided.</field>
+      <field type="uint16_t[18]" name="voltages" units="mV" invalid="[UINT16_MAX]">Battery voltage of cells 1 to 18</field>
+    </message>
+
+    <message id="899" name="UAT_ACTIVE_SERVICE">
+      <description>UAT_ACTIVE_SERVICE</description>
+      <field type="uint8_t" name="operation_step" enum="UAT_ACTIVE_STEP"> </field>
+      <field type="uint32_t" name="operation_value"> </field>
+      <field type="uint8_t" name="active_status" invalid="0"> </field>
+      <field type="char[17]" name="vehicleName"> </field>
+      <field type="char[19]" name="idCard"> </field>
+      <field type="char[12]" name="phoneNumber"> </field>
+      <field type="char[11]" name="activationDate"> </field>
+      <field type="char[15]" name="VID"> </field>
+      <field type="char[19]" name="Comp_ID"> </field>
+    </message>
+
+    <message id="900" name="UAT_TERRAIN_DISTANCE">
+      <description>UAT_TERRAIN_DISTANCE</description>
+      <field type="uint16_t[5]" name="part_distance" units="cm"> </field>
+      <field type="int16_t[5]" name="part_angle" units="deg"> part_angle * 0.01</field>
+      <field type="uint8_t[5]" name="signal_quality" invalid="0"> </field>
+      <field type="float" name="slope" units="deg"> </field>
+      <field type="uint16_t" name="min_distance" units="cm"> </field>
+      <field type="uint16_t" name="max_distance" units="cm"> </field>
+    </message>
+
+    <message id="901" name="UAT_OBSTACLE_DISTANCE">
+      <description>Obstacle distances in front of the sensor, starting from the left in increment degrees to the right , Defaults to MAV_FRAME_BODY_FRD</description>
+      <field type="uint64_t" name="time_usec" units="us">Timestamp (UNIX Epoch time or time since system boot). The receiving end can infer timestamp format (since 1.1.1970 or since system boot) by checking for the magnitude of the number.</field>
+      <field type="uint8_t" name="sensor_type" enum="MAV_DISTANCE_SENSOR">Class id of the distance sensor type.</field>
+      <field type="uint16_t[36]" name="horizontal_dist" units="cm" invalid="[UINT16_MAX]"> </field>
+      <field type="uint16_t[2]" name="vertical_dist" units="cm" invalid="[UINT16_MAX]"> </field>
+      <field type="uint8_t" name="increment" units="deg">Angular width in degrees of each array element. Increment direction is clockwise. This field is ignored if increment_f is non-zero.</field>
+      <field type="uint16_t" name="min_distance" units="cm">Minimum distance the sensor can measure.</field>
+      <field type="uint16_t" name="max_distance" units="cm">Maximum distance the sensor can measure.</field>
+    </message>
+
+     <message id="902" name="UAT_AGROYSYS_STATE">
+      <description>use for uat agro system control </description>
+      <field type="uint32_t" name="device_id">payload id</field>
+      <field type="uint8_t" name="type" enum="UAT_AGRO_TYPE" >agro sys type</field>
+      <field type="uint8_t" name="arm_lock"> true if lock done bit mask reference sequence </field>
+      <field type="uint16_t" name="weigth_remaining" units="10g">Empty </field> 
+      <field type="uint16_t" name="power_check_flag">Empty </field>
+      <field type="uint16_t" name="power_enabled_flag">Empty </field>
+      <field type="int8_t[2]" name="led_temperature" units="degC">Empty </field>
+      <field type="int8_t" name="board_temperature" units="degC">Empty </field>
+      <field type="uint8_t[2]" name="led_brightness" >0~100% </field>
+    </message>
+
+    <message id="903" name="UAT_SPREADSYS_STATE">
+      <description>use for uat agro spread system control </description>
+      <field type="uint8_t" name="material_empty"> 1：empty</field>
+      <field type="uint8_t" name="gate_throttle"> gate throttle 0~100(%) </field>
+      <field type="uint16_t" name="disk_rpm"> spinner disk rpm</field>
+      <field type="uint16_t" name="weight_flow_vel" units="10g/min"> Empty</field>
+      <field type="uint16_t" name="status_flag" enum="UAT_AGRO_STATE" >Bitmask UAT_AGRO_STATE</field>
+    </message>
+    
+    <message id="904" name="UAT_BOTCAMCALIB_CMD">
+      <description>Bottom Camera Calibration</description>
+      <field type="uint8_t" name="cmd">1:set 2:get</field>
+      <field type="uint8_t" name="cam_sel">0:camera0 1:camera1</field>
+      <field type="int32_t" name="src_img_rows"></field>
+      <field type="int32_t" name="src_img_cols"></field>
+      <field type="int32_t" name="dst_img_rows"></field>
+      <field type="int32_t" name="dst_img_cols"></field>
+      <field type="int32_t" name="CamCalib_model"></field>
+      <field type="float[4]" name="CamCalib_M"></field>
+      <field type="float[4]" name="CamCalib_P"></field>
+      <field type="float[5]" name="CamCalib_D"></field>
+      <field type="float[9]" name="CamCalib_R"></field>
+      <field type="float[16]" name="T_cam0_cam1"></field>
+      <field type="float[3]" name="euler"></field>
+    </message>
+
+    <message id="905" name="UAT_SET_MODE">
+      <description>Set the system mode, as defined by enum MAV_MODE. There is no target component id as the mode is by definition for the overall aircraft, not only for one component.</description>
+      <field type="uint8_t" name="target_system">The system setting the mode</field>
+      <field type="uint8_t" name="base_mode" enum="MAV_MODE">The new base mode.</field>
+      <field type="uint8_t" name="point_type" >Mission:enum UAT_MISSION_RESUM_POINT_TYPE,RTL::enum UAT_RTL_POINT_TYPE</field>
+      <field type="uint32_t" name="custom_mode">The new autopilot-specific mode. This field can be ignored by an autopilot.</field>
+    </message>
+
+    <message id="906" name="UAT_AG_SPRAYING_MODE">
+      <description> Self-developed mode switching, applied in the Q100 system </description>
+      <field type="uint8_t" name="ag_praying_mode">  Custom mode name: READY:1;MANUAL_CTRL:2;WORKING:3;WORK_PAUSED:4;RETURNING:5;LANDING:6.  </field>
+      <field type="uint8_t" name="tier1_mode">    </field>
+      <field type="uint8_t" name="tier2_mode">    </field>
+      <field type="uint8_t" name="tier3_mode">    </field>
+    </message>
+
+  </messages>
+</mavlink>

@@ -1,0 +1,47 @@
+<launch>  <!-- 启动 mavros 的 px4.launch 文件 -->
+  <!-- 定义参数路径,真机运行环境对应路径 -->
+  <arg name="user_name" default="uatair" />
+  <arg name="config_file" default="/home/$(arg user_name)/App/config/config.yaml" />
+
+  <!-- 加载配置文件 -->
+  <rosparam file="$(arg config_file)" command="load" />
+
+  <arg name="fcu_url" default="/dev/ttyACM0:57600" />
+  <arg name="gcs_url" default="" />
+  <arg name="tgt_system" default="1" />
+  <arg name="tgt_component" default="1" />
+  <arg name="log_output" default="screen" />
+  <arg name="fcu_protocol" default="v2.0" />
+  <arg name="respawn_mavros" default="false" />
+  <arg name="timesync_mode" default="PASSTHROUGH" />
+  <arg name="airframe" default="Q20" /> 
+
+  <node pkg="uavros" type="uavros_node" name="uavros" required="$(eval not respawn_mavros)" clear_params="true" output="$(arg log_output)" respawn="$(arg respawn_mavros)">
+		<param name="fcu_url" value="$(arg fcu_url)" />
+		<param name="gcs_url" value="$(arg gcs_url)" />
+		<param name="target_system_id" value="$(arg tgt_system)" />
+		<param name="target_component_id" value="$(arg tgt_component)" />
+		<param name="fcu_protocol" value="$(arg fcu_protocol)" />
+
+		<param name="time/timesync_mode" value="$(arg timesync_mode)" />
+	</node>
+
+  <include file="$(find mqtt_client)/launch/standalone.launch">
+      <arg name="respawn_mavros" default="$(arg respawn_mavros)" />
+  </include>
+
+  <include file="$(find identify)/launch/identify.launch">
+      <arg name="respawn_mavros" default="$(arg respawn_mavros)" />
+    </include>
+
+  <node pkg="uat_flycontrol_analyse" type="uat_flycontrol_analyse_node" name="uat_flycontrol_analyse" output="screen" respawn="true">
+  </node>
+
+  <include file="$(find uat_cloud_vechile)/launch/uat_cloud_vechile.launch">
+    <arg name="user_name" value="$(arg user_name)" />
+    <arg name="respawn_mavros" default="$(arg respawn_mavros)" />
+  </include>
+
+  <node pkg="uat_log_cloud" type="uat_log_cloud_node" name="uat_log_cloud" output="screen" respawn="true">
+  </node>
+</launch>
