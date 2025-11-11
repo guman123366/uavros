@@ -199,10 +199,24 @@ long CurlUploader::getLastResponseCode() const {
     return last_response_code_;
 }
 
-std::string CurlUploader::requestLogUrl(const std::string &fileName, const int &fileSize)
+std::string CurlUploader::requestLogUrl(const std::string& fileName,const long& fileSize,const std::string& uav_type,const std::string& sn,
+                             const std::string& sortie,const std::string& logType)
 {
     CURLcode res;
     std::string readBuffer; // 用于存储服务器响应
+
+    if(fileName==""||fileSize<=0||uav_type==""||sn==""||sortie==""||logType=="")
+    {
+        ROS_ERROR("requestLogUrl input param error!");
+        return "";
+    }
+
+    ROS_INFO("requestLogUrl fileName is %s",fileName.c_str());
+    ROS_INFO("requestLogUrl fileSize is %ld",fileSize);
+    ROS_INFO("requestLogUrl uav_type is %s",uav_type.c_str());
+    ROS_INFO("requestLogUrl sn is %s",sn.c_str());
+    ROS_INFO("requestLogUrl sortie is %s",sortie.c_str());
+    ROS_INFO("requestLogUrl logType is %s",logType.c_str());
 
     if (!initCurl()) {
         return "";
@@ -230,10 +244,12 @@ std::string CurlUploader::requestLogUrl(const std::string &fileName, const int &
         curl_easy_setopt(curl_, CURLOPT_HTTPHEADER, headers);
         
         cJSON *data = cJSON_CreateObject();
-        cJSON_AddStringToObject(data,"model","T1400");
-        cJSON_AddStringToObject(data,"sn","05KBBE000015");
+        cJSON_AddStringToObject(data,"model",uav_type.c_str());
+        cJSON_AddStringToObject(data,"sn",sn.c_str());
         cJSON_AddStringToObject(data,"filename",fileName.c_str());
         cJSON_AddNumberToObject(data,"size",fileSize);
+        cJSON_AddStringToObject(data,"sortie",sortie.c_str());
+        cJSON_AddStringToObject(data,"logType",logType.c_str());
 
         char *jsonString = cJSON_Print(data);
         std::string postData = jsonString;

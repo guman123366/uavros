@@ -47,7 +47,8 @@ uavros::UavRos::UavRos()
     uav_pub = uav_nh.advertise<std_msgs::UInt8MultiArray>("/telemeter_data", 1000);
     uav_fc_sub = uav_nh.subscribe<std_msgs::UInt8MultiArray>("/remote_control_data", 1000, &UavRos::uav_fc_sub_cb, this);
     fc_param_pub = uav_nh.advertise<std_msgs::UInt8MultiArray>("/fly_control_data", 1000);
-    mems_pub = uav_nh.advertise<std_msgs::UInt8MultiArray>("/mems_data", 1000);
+    main_mems_pub = uav_nh.advertise<std_msgs::UInt8MultiArray>("/main_mems_data", 1000);
+    backup_mems_pub = uav_nh.advertise<std_msgs::UInt8MultiArray>("/backup_mems_data", 1000);
     sense_pub = uav_nh.advertise<std_msgs::UInt8MultiArray>("/sense_data", 1000);
 
     // 创建FCU连接
@@ -62,26 +63,38 @@ uavros::UavRos::UavRos()
         return;
     }
 
-    // 创建MEMS连接
-    std::string mems_url;
-    if (!uav_nh.getParam("/mems_param/mems_connect", mems_url)) {
-        ROS_WARN("Param /mems_param/mems_connect does not exist, using default: udp://@");
-        mems_url = "udp://@";
+    // 创建MAIN_MEMS连接
+    std::string main_mems_url;
+    if (!uav_nh.getParam("/main_mems_param/mems_connect", main_mems_url)) {
+        ROS_WARN("Param /main_mems_param/mems_connect does not exist, using default: udp://@");
+        main_mems_url = "udp://@";
     }
-    ROS_INFO_STREAM("mems param is " << mems_url);
-    if (!createConnection(mems_url, system_id, component_id, mems_link, ConnectionType::MEMS)) {
+    ROS_INFO_STREAM(" main_mems param is " << main_mems_url);
+    if (!createConnection(main_mems_url, system_id, component_id, main_mems_link, ConnectionType::MAIN_MEMS)) {
         ros::shutdown();
         return;
     }
+
+    // 创建BACKUP_MEMS连接
+    std::string backup_mems_url;
+    if (!uav_nh.getParam("/backup_mems_param/mems_connect", backup_mems_url)) {
+        ROS_WARN("Param /backup_mems_param/mems_connect does not exist, using default: udp://@");
+        backup_mems_url = "udp://@";
+    }
+    ROS_INFO_STREAM(" backup_mems param is " << backup_mems_url);
+    if (!createConnection(backup_mems_url, system_id, component_id, backup_mems_link, ConnectionType::BACKUP_MEMS)) {
+        ros::shutdown();
+        return;
+    } 
 
     // 创建sense连接
     std::string sense_url;
     if (!uav_nh.getParam("/sense_param/sense_connect", sense_url)) {
         ROS_WARN("Param /sense_param/sense_connect does not exist, using default: udp://@");
-        mems_url = "udp://@";
+        sense_url = "udp://@";
     }
     ROS_INFO_STREAM("sense param is " << sense_url);
-    if (!createConnection(sense_url, system_id, component_id, mems_link, ConnectionType::SENSE)) {
+    if (!createConnection(sense_url, system_id, component_id, sense_link, ConnectionType::SENSE)) {
         ros::shutdown();
         return;
     }
@@ -94,19 +107,13 @@ uavros::UavRos::UavRos()
         ROS_ERROR("Failed to open FTI_Data.dat!");
     }
 
-    _memsFile.open("/home/uatair/Vehicle_Firmware/Mems_dat.log", std::ios::binary|std::ios::trunc);
-    if (_memsFile.is_open()) {
-        ROS_INFO("Mems_dat.dat opened successfully!");
-    } else {
-        ROS_ERROR("Failed to open Mems_dat.dat!");
-    }
-
     // 初始化成员变量
     serial_rev_counts = 0;
     data_nums = 0;
     vecBufData.reserve(1024); // 预分配内存
     vecFcParamData.reserve(1024);
-    vecMemsData.reserve(1024);
+    vecMainMemsData.reserve(1024);
+    vecBackupMemsData.reserve(1024);
     vecSenseData.reserve(1024);
 }
 
@@ -114,10 +121,6 @@ uavros::UavRos::~UavRos()
 {
     if (_saveFile.is_open()) {
         _saveFile.close();
-    }
-
-    if (_memsFile.is_open()) {
-        _memsFile.close();
     }
 }
 
@@ -153,13 +156,24 @@ bool UavRos::createConnection(const std::string& url, int& system_id, int& compo
                     });
                 break;
                 
-            case ConnectionType::MEMS:
+            case ConnectionType::MAIN_MEMS:
                 conn->connectHex(
                     [this](const uint8_t* buf, const size_t bufsize) {
-                        mems_pub_cb(buf, bufsize);
+                        main_mems_pub_cb(buf, bufsize);
                     },
                     []() {
-                        ROS_ERROR("MEMS connection closed, mavros will be terminated.");
+                        ROS_ERROR("MAIN_MEMS connection closed, mavros will be terminated.");
+                        ros::requestShutdown();
+                    });
+                break;
+
+            case ConnectionType::BACKUP_MEMS:
+                conn->connectHex(
+                    [this](const uint8_t* buf, const size_t bufsize) {
+                        backup_mems_pub_cb(buf, bufsize);
+                    },
+                    []() {
+                        ROS_ERROR("BACKUP_MEMS connection closed, mavros will be terminated.");
                         ros::requestShutdown();
                     });
                 break;
@@ -170,7 +184,7 @@ bool UavRos::createConnection(const std::string& url, int& system_id, int& compo
                         sense_pub_cb(buf, bufsize);
                     },
                     []() {
-                        ROS_ERROR("MEMS connection closed, mavros will be terminated.");
+                        ROS_ERROR("SENSE connection closed, mavros will be terminated.");
                         ros::requestShutdown();
                     });
                 break;
@@ -267,32 +281,38 @@ void uavros::UavRos::sense_pub_cb(const uint8_t* buf, const size_t bufsize)
     ROS_DEBUG("Received sense_data successfully!");
 }
 
-void uavros::UavRos::mems_pub_cb(const uint8_t* buf, const size_t bufsize)
+void uavros::UavRos::main_mems_pub_cb(const uint8_t* buf, const size_t bufsize)
 {
-    vecMemsData.insert(vecMemsData.end(), buf, buf + bufsize);
+    vecMainMemsData.insert(vecMainMemsData.end(), buf, buf + bufsize);
     
-    std_msgs::UInt8MultiArray mems_msg;
-    mems_msg.layout.dim.push_back(std_msgs::MultiArrayDimension());
-    mems_msg.layout.dim[0].label = "length";
-    mems_msg.layout.dim[0].size = vecMemsData.size();
-    mems_msg.layout.dim[0].stride = 1;
-    mems_msg.data.swap(vecMemsData); // 使用swap避免拷贝
+    std_msgs::UInt8MultiArray main_mems_msg;
+    main_mems_msg.layout.dim.push_back(std_msgs::MultiArrayDimension());
+    main_mems_msg.layout.dim[0].label = "length";
+    main_mems_msg.layout.dim[0].size = vecMainMemsData.size();
+    main_mems_msg.layout.dim[0].stride = 1;
+    main_mems_msg.data.swap(vecMainMemsData); // 使用swap避免拷贝
 
-    mems_pub.publish(mems_msg);
-
-    // 记录数据到文件
-    if (_memsFile.is_open()) {
-        _memsFile.write(reinterpret_cast<const char*>(buf), bufsize);
-    }
+    main_mems_pub.publish(main_mems_msg);
     
-    uint8_to_hex_string(mems_msg.data.data(), std::min(mems_msg.data.size(), size_t(10))); // 只打印前10个字节
-    ROS_DEBUG("Received mems_data successfully!");
+    uint8_to_hex_string(main_mems_msg.data.data(), std::min(main_mems_msg.data.size(), size_t(10))); // 只打印前10个字节
+    ROS_DEBUG("Received main_mems_data successfully!");
 }
 
-void uavros::UavRos::createMemsConnect(const std::string &url, int systemid, int componentid)
+void uavros::UavRos::backup_mems_pub_cb(const uint8_t* buf, const size_t bufsize)
 {
-	// 这个函数现在被createConnection替代，保留以保持接口兼容性
-    createConnection(url, systemid, componentid, mems_link, ConnectionType::MEMS);
+    vecBackupMemsData.insert(vecBackupMemsData.end(), buf, buf + bufsize);
+    
+    std_msgs::UInt8MultiArray backup_mems_msg;
+    backup_mems_msg.layout.dim.push_back(std_msgs::MultiArrayDimension());
+    backup_mems_msg.layout.dim[0].label = "length";
+    backup_mems_msg.layout.dim[0].size = vecBackupMemsData.size();
+    backup_mems_msg.layout.dim[0].stride = 1;
+    backup_mems_msg.data.swap(vecBackupMemsData); // 使用swap避免拷贝
+
+    backup_mems_pub.publish(backup_mems_msg);
+    
+    uint8_to_hex_string(backup_mems_msg.data.data(), std::min(backup_mems_msg.data.size(), size_t(10))); // 只打印前10个字节
+    ROS_DEBUG("Received backup_mems_data successfully!");
 }
 
 void uavros::UavRos::uint8_to_hex_string(const uint8_t *data, size_t length)

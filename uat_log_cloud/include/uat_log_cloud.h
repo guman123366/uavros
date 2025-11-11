@@ -39,11 +39,13 @@ public:
     uat_log_cloud();
     ~uat_log_cloud();
 
+    void set_sn(const std::string& sn) { _sn = sn; }    
 private:
     
     void upfile_cloud_cb(const ros::TimerEvent &event);
     void fc_param_data_sub_cb(std_msgs::UInt8MultiArray msg);
-    void mems_data_sub_cb(std_msgs::UInt8MultiArray msg);
+    void main_mems_data_sub_cb(std_msgs::UInt8MultiArray msg);
+    void backup_mems_data_sub_cb(std_msgs::UInt8MultiArray msg);
     void sense_data_sub_cb(std_msgs::UInt8MultiArray msg);
 
     void processDataChunk(const std::vector<uint8_t>& new_data, 
@@ -77,7 +79,8 @@ private:
     ros::Timer _up_file_timer;
 
     ros::Subscriber fc_param_sub;
-    ros::Subscriber mems_sub;
+    ros::Subscriber main_mems_sub;
+    ros::Subscriber backup_mems_sub;
     ros::Subscriber sense_sub;
 
     // 全局运行状态
@@ -85,7 +88,8 @@ private:
     
     // 三种数据类型的文件信息
     logfileinfo fc_data_file_info;
-    logfileinfo mems_data_file_info;
+    logfileinfo main_mems_data_file_info;
+    logfileinfo backup_mems_data_file_info;
     logfileinfo sense_data_file_info;
     
     // 全局统计信息
@@ -96,4 +100,9 @@ private:
     // 性能监控
     std::map<std::string, ros::Time> last_stat_time_;
     std::map<std::string, size_t> data_received_stats_;
+
+    std::string _uav_type;
+    std::string _sn;
+    long _sortie;
+    int _last_receive_time;
 };

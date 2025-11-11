@@ -62,7 +62,8 @@ public:
     long getLastResponseCode() const;
 
     // 请求日志上传链接
-    std::string requestLogUrl(const std::string& fileName,const int& fileSize);
+    std::string requestLogUrl(const std::string& fileName,const long& fileSize,const std::string& uav_type,const std::string& sn,
+                             const std::string& sortie,const std::string& logType);
 
     //获取返回MD5
     std::string getResponseMD5();

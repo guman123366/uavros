@@ -12,21 +12,26 @@
 #include <atomic>
 
 uat_log_cloud::uat_log_cloud()
-:uat_log_nh("~"),running_(false),bytes_received_(0)
+:uat_log_nh("~"),running_(false),bytes_received_(0),_uav_type(""),_sortie(-1),
+_last_receive_time(0)
 {
     //_curlUploader=std::make_shared<CurlUploader>();
 
     fc_param_sub = uat_log_nh.subscribe<std_msgs::UInt8MultiArray>("/fly_control_data", 1000,&uat_log_cloud::fc_param_data_sub_cb,this);
-    mems_sub = uat_log_nh.subscribe<std_msgs::UInt8MultiArray>("/mems_data", 1000,&uat_log_cloud::mems_data_sub_cb,this);
+    main_mems_sub = uat_log_nh.subscribe<std_msgs::UInt8MultiArray>("/main_mems_data", 1000,&uat_log_cloud::main_mems_data_sub_cb,this);
+    backup_mems_sub = uat_log_nh.subscribe<std_msgs::UInt8MultiArray>("/backup_mems_data", 1000,&uat_log_cloud::backup_mems_data_sub_cb,this);
     sense_sub = uat_log_nh.subscribe<std_msgs::UInt8MultiArray>("/sense_data", 1000,&uat_log_cloud::sense_data_sub_cb,this);
 
     _up_file_timer = uat_log_nh.createTimer(ros::Duration(1), &uat_log_cloud::upfile_cloud_cb, this, false);
+ 
+	uat_log_nh.getParam("/uav_type",_uav_type);
 
     readFileInfo();
 
     //读取目录下的初始文件
     listFiles(fc_data_file_info);
-    listFiles(mems_data_file_info);
+    listFiles(main_mems_data_file_info);
+    listFiles(backup_mems_data_file_info);
     listFiles(sense_data_file_info);
 
     startThread();
@@ -41,19 +46,37 @@ uat_log_cloud::~uat_log_cloud()
 
 void uat_log_cloud::upfile_cloud_cb(const ros::TimerEvent &event)
 {
-    
+    int lost_time=ros::Time::now().toSec()-_last_receive_time;
+    if(lost_time>5)
+    {
+        _sortie=-1;
+        ROS_WARN("No data received for %d seconds!",lost_time);
+    }
 
 }
 
 void uat_log_cloud::fc_param_data_sub_cb(std_msgs::UInt8MultiArray msg)
 {
+    if(_sortie==-1)
+    {
+        _sortie=ros::Time::now().toNSec() / 1000000;
+    }
+
+    _last_receive_time=ros::Time::now().toSec();
+
     processDataChunk(msg.data, fc_data_file_info);
+}   
+
+void uat_log_cloud::main_mems_data_sub_cb(std_msgs::UInt8MultiArray msg)
+{
+    processDataChunk(msg.data, main_mems_data_file_info);
+    ROS_INFO("uat_log_cloud receive main mems data successfully");
 }
 
-void uat_log_cloud::mems_data_sub_cb(std_msgs::UInt8MultiArray msg)
+void uat_log_cloud::backup_mems_data_sub_cb(std_msgs::UInt8MultiArray msg)
 {
-    processDataChunk(msg.data, mems_data_file_info);
-    ROS_INFO("uat_log_cloud receive mems data successfully");
+    processDataChunk(msg.data, backup_mems_data_file_info);
+    ROS_INFO("uat_log_cloud receive backup mems data successfully");
 }
 
 void uat_log_cloud::sense_data_sub_cb(std_msgs::UInt8MultiArray msg)
@@ -112,7 +135,7 @@ void uat_log_cloud::readFileInfo()
         ROS_INFO("data_chunk_size read failed, using default: %d", fc_data_file_info.data_chunk_size);
     }
     fc_data_file_info.current_chunk.reserve(fc_data_file_info.data_chunk_size);
-    fc_data_file_info.data_type="fc";
+    fc_data_file_info.data_type="FLY_PARAM";
     fc_data_file_info.upload_enabled=true;
     
     if(uat_log_nh.getParam("/flycontrol_param/data_save_path",fc_data_file_info.data_directory))
@@ -134,29 +157,55 @@ void uat_log_cloud::readFileInfo()
         ROS_INFO("url read failed!");
     }
 
-    if(uat_log_nh.getParam("/mems_param/data_chunk_size",mems_data_file_info.data_chunk_size))
+    //读取主MEMS接口参数
+    if(uat_log_nh.getParam("/main_mems_param/data_chunk_size",main_mems_data_file_info.data_chunk_size))
     {
-        ROS_INFO("data_chunk_size is %d",mems_data_file_info.data_chunk_size);
+        ROS_INFO("main mems data_chunk_size is %d",main_mems_data_file_info.data_chunk_size);
     }
     else
     {
-        mems_data_file_info.data_chunk_size=1024*1024;
-        ROS_INFO("data_chunk_size read failed, using default: %d", mems_data_file_info.data_chunk_size);
+        main_mems_data_file_info.data_chunk_size=1024*1024;
+        ROS_INFO("main mems data_chunk_size read failed, using default: %d", main_mems_data_file_info.data_chunk_size);
     }
-    mems_data_file_info.current_chunk.reserve(mems_data_file_info.data_chunk_size);
-    mems_data_file_info.data_type="mems";
-    mems_data_file_info.upload_enabled=true;
+    main_mems_data_file_info.current_chunk.reserve(main_mems_data_file_info.data_chunk_size);
+    main_mems_data_file_info.data_type="MAIN_MEMS";
+    main_mems_data_file_info.upload_enabled=true;
     
-    if(uat_log_nh.getParam("/mems_param/data_save_path",mems_data_file_info.data_directory))
+    if(uat_log_nh.getParam("/main_mems_param/data_save_path",main_mems_data_file_info.data_directory))
     {
-        ROS_INFO("data_save_path is %s",mems_data_file_info.data_directory.c_str());
+        ROS_INFO("main mems data_save_path is %s",main_mems_data_file_info.data_directory.c_str());
     }
     else{
-        mems_data_file_info.data_directory="/tmp/uat_logs";
-        ROS_INFO("data_save_path read failed, using default: %s", mems_data_file_info.data_directory.c_str());
+        main_mems_data_file_info.data_directory="/tmp/uat_logs";
+        ROS_INFO("main mems data_save_path read failed, using default: %s", main_mems_data_file_info.data_directory.c_str());
     }
-    createDataDirectory(mems_data_file_info.data_directory);
+    createDataDirectory(main_mems_data_file_info.data_directory);
 
+    //读取备MEMS接口参数
+    if(uat_log_nh.getParam("/backup_mems_param/data_chunk_size",backup_mems_data_file_info.data_chunk_size))
+    {
+        ROS_INFO("backup mems data_chunk_size is %d",backup_mems_data_file_info.data_chunk_size);
+    }
+    else
+    {
+        backup_mems_data_file_info.data_chunk_size=1024*1024;
+        ROS_INFO("backup mems data_chunk_size read failed, using default: %d", backup_mems_data_file_info.data_chunk_size);
+    }
+    backup_mems_data_file_info.current_chunk.reserve(backup_mems_data_file_info.data_chunk_size);
+    backup_mems_data_file_info.data_type="BACKUP_MEMS";
+    backup_mems_data_file_info.upload_enabled=true;
+    
+    if(uat_log_nh.getParam("/backup_mems_param/data_save_path",backup_mems_data_file_info.data_directory))
+    {
+        ROS_INFO("backup mems data_save_path is %s",backup_mems_data_file_info.data_directory.c_str());
+    }
+    else{
+        backup_mems_data_file_info.data_directory="/tmp/uat_logs";
+        ROS_INFO("backup mems data_save_path read failed, using default: %s", backup_mems_data_file_info.data_directory.c_str());
+    }
+    createDataDirectory(backup_mems_data_file_info.data_directory);
+
+    //读取传感器接口参数
     if(uat_log_nh.getParam("/sense_param/data_chunk_size",sense_data_file_info.data_chunk_size))
     {
         ROS_INFO("data_chunk_size is %d",sense_data_file_info.data_chunk_size);
@@ -167,7 +216,7 @@ void uat_log_cloud::readFileInfo()
         ROS_INFO("data_chunk_size read failed, using default: %d", sense_data_file_info.data_chunk_size);
     }
     sense_data_file_info.current_chunk.reserve(sense_data_file_info.data_chunk_size);
-    sense_data_file_info.data_type="sense";
+    sense_data_file_info.data_type="OTHER_SENSE";
     sense_data_file_info.upload_enabled=true;
     
     if(uat_log_nh.getParam("/sense_param/data_save_path",sense_data_file_info.data_directory))
@@ -254,20 +303,25 @@ void uat_log_cloud::stopThread()
     
     // 停止所有数据类型的上传
     fc_data_file_info.upload_enabled = false;
-    mems_data_file_info.upload_enabled = false;
+    main_mems_data_file_info.upload_enabled = false;
+    backup_mems_data_file_info.upload_enabled = false;
     sense_data_file_info.upload_enabled = false;
     
     // 通知所有等待的线程
     fc_data_file_info.queue_cv.notify_all();
-    mems_data_file_info.queue_cv.notify_all();
+    main_mems_data_file_info.queue_cv.notify_all();
+    backup_mems_data_file_info.queue_cv.notify_all();   
     sense_data_file_info.queue_cv.notify_all();
     
     // 等待所有线程结束
     if (fc_data_file_info.upload_thread.joinable()) {
         fc_data_file_info.upload_thread.join();
     }
-    if (mems_data_file_info.upload_thread.joinable()) {
-        mems_data_file_info.upload_thread.join();
+    if (main_mems_data_file_info.upload_thread.joinable()) {
+        main_mems_data_file_info.upload_thread.join();
+    }
+    if(backup_mems_data_file_info.upload_thread.joinable()) {
+        backup_mems_data_file_info.upload_thread.join();
     }
     if (sense_data_file_info.upload_thread.joinable()) {
         sense_data_file_info.upload_thread.join();
@@ -288,7 +342,8 @@ void uat_log_cloud::startThread()
     // 启动上传线程
     // 启动三个独立的上传线程
     fc_data_file_info.upload_thread = std::thread(&uat_log_cloud::uploadThread, this, std::ref(fc_data_file_info));
-    mems_data_file_info.upload_thread = std::thread(&uat_log_cloud::uploadThread, this, std::ref(mems_data_file_info));
+    main_mems_data_file_info.upload_thread = std::thread(&uat_log_cloud::uploadThread, this, std::ref(main_mems_data_file_info));
+    backup_mems_data_file_info.upload_thread = std::thread(&uat_log_cloud::uploadThread, this, std::ref(backup_mems_data_file_info));
     sense_data_file_info.upload_thread = std::thread(&uat_log_cloud::uploadThread, this, std::ref(sense_data_file_info));
     
     ROS_INFO("Started 3 upload threads for FC, MEMS, and SENSE data");
@@ -420,7 +475,7 @@ bool uat_log_cloud::uploadFile(const std::string& filepath, const std::string& d
 
         CurlUploader curlUploader;
 
-        std::string upload_url = curlUploader.requestLogUrl(filename, filesize);
+        std::string upload_url = curlUploader.requestLogUrl(filename, filesize,_uav_type,_sn,std::to_string(_sortie),data_type);
         if (upload_url.empty()) {
             ROS_ERROR("[%s] Failed to get upload URL for file: %s", data_type.c_str(), filename.c_str());
             file.close();
